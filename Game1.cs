@@ -19,6 +19,8 @@ namespace Minimax
 		public Player player2;
 		public Player actualPlayer;
 
+		public DivElement tested;
+
 		public bool mousePressed = false;
 		public int win = 0;
 		public int AISpeed = 2000;
@@ -47,7 +49,13 @@ namespace Minimax
 			cellX = Content.Load<Texture2D>("cellx");
 			cellO = Content.Load<Texture2D>("cello");
 			gameDraw = Content.Load<Texture2D>("Char33");
+			tested = new DivElement (this, new Vector2 (64, 64),new Vector2(10,10), cellX);
 		}
+
+		public void df(Vector2 z= default(Vector2)){
+			Console.WriteLine (z);
+		}
+
 
 		public void teste(params int[] p){
 			Console.WriteLine (p[0]+","+p[1]);
@@ -58,6 +66,8 @@ namespace Minimax
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
+
+
 
 			if (win == 0)
 			{
@@ -146,7 +156,7 @@ namespace Minimax
 
 			spriteBatch.Begin();
 
-
+			tested.Draw();
 			if (win == 0)
 			{
 

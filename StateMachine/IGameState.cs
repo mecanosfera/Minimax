@@ -9,6 +9,8 @@ namespace Minimax
 
 		void HandleInput();
 
+		void AddUIElement(UIElement e);
+
 		void Update();
 
 		void Exit();

@@ -2,7 +2,7 @@
 
 namespace Minimax
 {
-	public class ButtonElement : TextElement
+	public class ButtonElement
 	{
 		public ButtonElement ()
 		{

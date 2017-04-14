@@ -2,23 +2,13 @@
 
 namespace Minimax
 {
-	public class EndGameState : IGameState
+	public class EndGameState : GameState
 	{
-		public EndGameState ()
+		public EndGameState(Game1 g, string n): base(g,n)
 		{
 		}
 
-		public void Enter(){
 
-		}
-
-		public void HandleInput(){
-
-		}
-
-		public void Update(){}
-
-		public void Exit(){}
 	}
 }
 

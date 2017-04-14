@@ -2,23 +2,12 @@
 
 namespace Minimax
 {
-	public class PlayGameState : IGameState
+	public class PlayGameState : GameState
 	{
-		public PlayGameState ()
+		public PlayGameState(Game1 g, string n): base(g,n)
 		{
 		}
-
-		public void Enter(){
-
-		}
-
-		public void HandleInput(){
-
-		}
-
-		public void Update(){}
-
-		public void Exit(){}
+			
 	}
 }
 
