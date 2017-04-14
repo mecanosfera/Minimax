@@ -49,6 +49,10 @@ namespace Minimax
 			gameDraw = Content.Load<Texture2D>("Char33");
 		}
 
+		public void teste(params int[] p){
+			Console.WriteLine (p[0]+","+p[1]);
+		}
+
 
 		protected override void Update(GameTime gameTime)
 		{
@@ -75,7 +79,7 @@ namespace Minimax
 						actualPlayer = player1;
 					}
 					win = board.Victory();
-					Console.WriteLine(win);
+					teste(new int[2]{41,78});
 
 				}
 				else

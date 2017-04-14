@@ -7,6 +7,18 @@ namespace Minimax
 		public PlayGameState ()
 		{
 		}
+
+		public void Enter(){
+
+		}
+
+		public void HandleInput(){
+
+		}
+
+		public void Update(){}
+
+		public void Exit(){}
 	}
 }
 

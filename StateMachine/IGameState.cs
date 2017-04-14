@@ -7,6 +7,8 @@ namespace Minimax
 		
 		void Enter();
 
+		void HandleInput();
+
 		void Update();
 
 		void Exit();
