@@ -2,9 +2,9 @@
 
 namespace Minimax
 {
-	public class GameState
+	public class StateMachine
 	{
-		public GameState ()
+		public StateMachine ()
 		{
 		}
 	}
