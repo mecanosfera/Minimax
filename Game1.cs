@@ -19,7 +19,10 @@ namespace Minimax
 		public Player player2;
 		public Player actualPlayer;
 
+
+		public SpriteFont arial12;
 		public DivElement tested;
+		public TextElement textd;
 
 		public bool mousePressed = false;
 		public int win = 0;
@@ -45,11 +48,13 @@ namespace Minimax
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			cellEmpty = Content.Load<Texture2D>("cell");
-			cellX = Content.Load<Texture2D>("cellx");
-			cellO = Content.Load<Texture2D>("cello");
-			gameDraw = Content.Load<Texture2D>("Char33");
+			cellEmpty = Content.Load<Texture2D>("Sprites/cell");
+			cellX = Content.Load<Texture2D>("Sprites/cellx");
+			cellO = Content.Load<Texture2D>("Sprites/cello");
+			gameDraw = Content.Load<Texture2D>("Sprites/Char33");
+			arial12 = Content.Load<SpriteFont> ("Fonts/Arial12");
 			tested = new DivElement (this, new Vector2 (64, 64),new Vector2(10,10), cellX);
+			textd = new TextElement (this,"teste!",new Vector2(100,50),new Vector2(90,90),arial12,cellEmpty);
 		}
 
 		public void df(Vector2 z= default(Vector2)){
@@ -89,7 +94,7 @@ namespace Minimax
 						actualPlayer = player1;
 					}
 					win = board.Victory();
-					teste(new int[2]{41,78});
+					//teste(new int[2]{41,78});
 
 				}
 				else
@@ -97,7 +102,9 @@ namespace Minimax
 					if (Mouse.GetState().LeftButton == ButtonState.Pressed && !mousePressed)
 					{
 						mousePressed = true;
+
 						Vector2 pTest = new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
+						tested.OnClick(new Event(pTest));
 
 						for (int y = 0; y < 3; y++)
 						{
@@ -154,9 +161,20 @@ namespace Minimax
 		{
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin();
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
 
+			tested.Align ("center", "middle");
+			tested.Padding (50, 0, 1, 0);
+			tested.AddEventListener("click", delegate(DivElement d, Event e){
+				
+			});
+			//tested.OnClick(new Event(5,6,7,8));
 			tested.Draw();
+			textd.Padding (20);
+			textd.align = "center";
+			textd.textAlign = "center";
+			//textd.Draw();
+
 			if (win == 0)
 			{
 
