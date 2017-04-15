@@ -1,7 +1,9 @@
-﻿#----------------------------- Global Properties ----------------------------#
+
+#----------------------------- Global Properties ----------------------------#
 
 /outputDir:bin/$(Platform)
 /intermediateDir:obj/$(Platform)
+/platform:Windows
 /config:
 /profile:Reach
 /compress:False
@@ -10,3 +12,22 @@
 
 
 #---------------------------------- Content ---------------------------------#
+
+#begin Fonts/Arial12.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Arial12.spritefont
+
+#begin Sprites/cell.png
+/copy:Sprites/cell.png
+
+#begin Sprites/cello.png
+/copy:Sprites/cello.png
+
+#begin Sprites/cellx.png
+/copy:Sprites/cellx.png
+
+#begin Sprites/Char33.png
+/copy:Sprites/Char33.png
+
