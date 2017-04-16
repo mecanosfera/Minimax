@@ -9,7 +9,7 @@ namespace Minimax
 		public int opponentNumber;
 		public bool npc;
 		public int wins = 0;
-		public int randomness = 0; //define a aleatoriedade do npc, de 0 a 100
+		public int difficulty = 100; //define a aleatoriedade do npc, de 0 a 100
         public Game1 game;
 
 		public Player(Game1 game, int number, bool npc, int random=0)
@@ -24,7 +24,7 @@ namespace Minimax
 				opponentNumber = 1;
 			}
 
-			randomness = random;
+			difficulty = random;
 			this.npc = npc;
             this.game = game;
 
@@ -39,12 +39,10 @@ namespace Minimax
 
 			//calcula a chance de uma escolha aleatória a partir do nível de randomness do jogador
 			Random r = new Random ();
-			int option = r.Next (1, 101);
-			Console.WriteLine (option);
 
 			/*se optar por Minimax o loop passa por cada célula livre e calcula o valor
 			do Minimax, guardando o maior valor a célula correspondente.*/
-			if (randomness == 0 || option > randomness) {
+			if (difficulty == 100 || r.Next(1, 101) <= difficulty) {
 				for (int y = 0; y < 3; y++) {
 					for (int x = 0; x < 3; x++) {
 						if (board.cell [x, y] == 0) {
@@ -62,9 +60,9 @@ namespace Minimax
 							// o Minimax inicia com false.
 							int val;
 							if (alphabeta) {
-								val = MinimaxAB (myCopy, board.getLeft (), false, 9999, -9999);
+								val = Minimax(myCopy, board.getLeft (), false, 9999, -9999);
 							} else {
-								val = Minimax (myCopy, board.getLeft (), false);
+								val = Minimax(myCopy, board.getLeft (), false);
 							}
 							if (val >= bestVal) {
 								bestVal = val;
@@ -94,8 +92,7 @@ namespace Minimax
 			return nextMove;
 		}
 
-		public int MinimaxAB(Board Board, int depth, bool isMax, int alpha, int beta){
-
+		public int Minimax(Board Board, int depth, bool isMax, int alpha, int beta){
 			return 0;
 		}
 

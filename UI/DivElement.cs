@@ -14,15 +14,25 @@ namespace Minimax
 		public Texture2D background;
 		public Color backgroundColor = Color.Transparent;
 		public Color foregroundColor = Color.White;
+		public string align = "left"; //left, right, center;
+		public string vAlign = "top"; //top, bottom, middle;
+		public string position = "relative"; //relative, absolute, inherit
 		protected int[] margin = new int[4] {0,0,0,0}; //left,top,right,bottom
 		protected int[] padding = new int[4] {0,0,0,0}; //left,top,right,bottom
-		protected string align = "left"; //left, right, center;
-		protected string vAlign = "top"; //top, bottom, middle;
-		protected string position = "relative"; //relative, absolute, inherit
-		protected DivElement parent = null;
-		protected List<DivElement> children;
+		public DivElement parent = null;
+		protected List<DivElement> children = new List<DivElement>();
 		protected Game1 game;
 
+		public bool clicked = false;
+		public bool active = false;
+		public bool disabled = false;
+		public bool display = true;
+		public delegate void EventHandler(DivElement origin, Event e);
+		public event EventHandler Click;
+		public event EventHandler MouseOver;
+		public event EventHandler MousePressed;
+		public event EventHandler MouseReleased;
+		public event EventHandler Change;
 
 
 		public DivElement (Game1 g, Vector2 s, Texture2D bg=null)
@@ -41,7 +51,7 @@ namespace Minimax
 			background = bg;
 		}
 
-		public void append(DivElement e){
+		public void Append(DivElement e){
 			children.Add(e);
 			e.parent = this;
 		}
@@ -64,6 +74,11 @@ namespace Minimax
 					padding[i] = p[i];
 				}
 			}
+		}
+
+		public void Align(string ha, string va){
+			align = ha;
+			vAlign = va;
 		}
 
 		public Vector2 calcPosition(){
@@ -125,10 +140,63 @@ namespace Minimax
 			return size+new Vector2(padding[0]+padding[2],padding[1]+padding[3]);
 		}
 
-		public void DrawSprite(){
-			Console.WriteLine ("n_draw");
+		public bool detectInteracion(Vector2 p){
+			Vector2 aSize = calcSize();
+			Vector2 aPos = calcPosition();
+			if ((p.X >= aPos.X && p.X <= aPos.X + aSize.X) && (p.Y >= aPos.Y && p.Y <= aPos.Y + aSize.Y)) {
+				return true;
+			}
+			return false;
+		}
+
+		public void AddEventListener(string type, EventHandler callback){
+			if (type.ToLower() == "click") {
+				Click += callback;
+			} else if (type.ToLower() == "mousepressed"){
+				MousePressed += callback;	
+			} else if (type.ToLower() == "released"){
+				MouseReleased += callback;
+			} else if (type.ToLower() == "mouseover") {
+				MouseOver += callback;
+			}
+		}
+
+		public virtual bool OnMousePressed(Event e, bool fireClick=true){
+			if (detectInteracion(e.vVector)) {
+				if (!active && fireClick){
+					return OnClick(e);
+				}
+				active = true;
+				clicked = true;
+				MousePressed (this, e);
+				return true;
+			}
+			return false;
+		}
+
+		public virtual bool OnMouseReleased(Event e){
+			if (detectInteracion(e.vVector)) {
+				active = false;
+				clicked = false;
+				MouseReleased (this, e);
+				return true;
+			}
+			return false;
+		}
+
+		public virtual bool OnClick(Event e){
+			if (detectInteracion(e.vVector)) {
+				Click(this,e);
+				return true;
+			}
+			return false;
+		}
+
+		public virtual void DrawText(){}
+
+		public virtual void DrawSprite(){
 			if (background != null) {
-				Console.WriteLine ("draw");
+				//Console.WriteLine (background.Name);
 				game.spriteBatch.Draw(
 					background,
 					calcPosition(),
@@ -144,17 +212,15 @@ namespace Minimax
 			}
 		}
 
-		public void DrawText(){}
-
 		public void Draw(){
+			if (display) {
+				
+				DrawSprite();
+				DrawText();
 
-			DrawSprite();
-
-			DrawText();
-
-			foreach(DivElement ch in children){
-
-				ch.Draw();
+				foreach(DivElement ch in children) {
+					ch.Draw();
+				}
 			}
 
 		}

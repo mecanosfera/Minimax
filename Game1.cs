@@ -3,6 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Minimax
 {
@@ -21,6 +22,7 @@ namespace Minimax
 
 
 		public SpriteFont arial12;
+		public SpriteFont defaultFont;
 		public DivElement tested;
 		public TextElement textd;
 
@@ -28,14 +30,21 @@ namespace Minimax
 		public int win = 0;
 		public int AISpeed = 2000;
 
+		public StateMachine GameMode;
+
 		public Game1()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 			player1 = new Player(this, 1, false);
-			player2 = new Player(this, 2, true,0);
+			player2 = new Player(this, 2, false);
 			actualPlayer = player1;
+			GameMode = new StateMachine(new Dictionary<string,IState>(){
+				{"start",	new StartGameState (this,"start")},
+				{"play",	new PlayGameState (this,"play")},
+				{"end",		new EndGameState (this,"end")}
+			});
 		}
 
 
@@ -53,6 +62,7 @@ namespace Minimax
 			cellO = Content.Load<Texture2D>("Sprites/cello");
 			gameDraw = Content.Load<Texture2D>("Sprites/Char33");
 			arial12 = Content.Load<SpriteFont> ("Fonts/Arial12");
+			defaultFont = arial12;
 			tested = new DivElement (this, new Vector2 (64, 64),new Vector2(10,10), cellX);
 			textd = new TextElement (this,"teste!",new Vector2(100,50),new Vector2(90,90),arial12,cellEmpty);
 		}
@@ -71,7 +81,6 @@ namespace Minimax
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-
 
 
 			if (win == 0)

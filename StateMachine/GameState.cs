@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Minimax
 {
-	public abstract class GameState
+	public abstract class GameState : IState
 	{
 
 		public List<DivElement> elements = new List<DivElement>();
@@ -16,21 +16,25 @@ namespace Minimax
 			name = n;
 		}
 
-		public void Enter(){
-
-		}
-
-		public void AddUIElement(DivElement e){
+		public virtual void AddElement(DivElement e){
 			elements.Add (e);
 		}
 
-		public void HandleInput(){
+		public virtual void Enter(string lastState=null){}
+			
+		public virtual void HandleInput(){}
 
+		public virtual void Update(){}
+
+		public virtual void Draw(){
+			foreach (DivElement e in elements) {
+				if (e.parent == null) {
+					e.Draw();
+				}
+			}
 		}
 
-		public void Update(){}
-
-		public void Exit(){}
+		public virtual void Exit(){}
 	}
 }
 
