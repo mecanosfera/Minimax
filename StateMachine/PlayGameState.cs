@@ -16,6 +16,7 @@ namespace Minimax
 		public TextElement scoreP1;
 		public TextElement scoreP2;
 		public TextElement scoreEmpate;
+		public ButtonElement quitMenu;
 
 		public PlayGameState(Game1 g, string n): base(g,n)
 		{
@@ -37,6 +38,16 @@ namespace Minimax
 						cellPos,
 						new int[2] {x,y}
 					);
+					cell.AddEventListener("click",delegate(DivElement origin, Event e){
+						CellButton c = (CellButton) origin;
+						if(win==0 && !game.actualPlayer.npc){
+							if(game.board.cell[c.cell[0],c.cell[1]]==0){
+								c.updateCell(game.actualPlayer.playerNumber);
+								win = game.board.Victory();
+							}
+						}
+					});
+
 					AddElement(cell);
 					cells [x, y] = cell;;
 				}
@@ -53,16 +64,31 @@ namespace Minimax
 			scoreEmpate.align="center";
 			scoreEmpate.textAlign="center";
 
+			quitMenu = new ButtonElement(game,"Quit to Menu",new Vector2(50,20));
+			quitMenu.Align("right", "bottom");
+			quitMenu.Margin(20);
+			quitMenu.AddEventListener("click",delegate(DivElement origin, Event e) {
+				game.GameMode.Change("start");
+			});
+				
 			AddElement(scoreP1);
 			AddElement(scoreP2);
 			AddElement(scoreEmpate);
+			AddElement(quitMenu);
 		}
 
 		public override void Enter(string lastState=null){
-			
+			game.board.Clear();
+			win = 0;
+			if(lastState == "end") {
+				score = ((EndGameState)game.GameMode.get("end")).score;
+			} else {
+				score = new int[3]{ 0, 0, 0 };
+			}
 		}
 
 		public override void Update(){
+			base.HandleInput();
 			if(win == 0) {
 				if(game.actualPlayer.npc) {
 					int[] nextMove = game.actualPlayer.bestMove();
@@ -70,14 +96,6 @@ namespace Minimax
 						cells[nextMove[0], nextMove[1]].updateCell(game.actualPlayer.playerNumber);
 					}
 					win = game.board.Victory();
-				} else {
-					if(Mouse.GetState().LeftButton == ButtonState.Pressed) {
-						foreach(CellButton cb in cells) {
-							cb.OnClick(new Event(new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y)));
-						}
-					} else if(Mouse.GetState().LeftButton == ButtonState.Released) {
-						win = game.board.Victory();
-					}
 				}
 			} else {
 				if(win == 3) {
@@ -87,14 +105,23 @@ namespace Minimax
 				} else {
 					score[2]++;
 				}
-				game.GameMode.Change("EndGame");
+				game.GameMode.Change("end");
 			}
 			
 		}
 
 
-		public override void Exit(){
-			game.board.Clear();
+		public override void Exit(string newState=null){
+			if(newState == "start") {
+				score = new int[3] { 0, 0, 0 };
+				game.board.Clear ();
+				win = 0;
+				game.player1.npc = false;
+				game.player2.npc = false;
+				game.player1.difficulty = 100;
+				game.player2.difficulty = 100;
+			}
+
 			foreach(CellButton cell in cells) {
 				cell.Clear();
 			}

@@ -8,9 +8,12 @@ namespace Minimax
 {
 	public class DivElement
 	{
+		protected Game1 game;
 
+		///pos funciona como position de top/bottom, left/right, mas depende do align/vAlign e não é levado em conta
+		///quando os valores de align/vAlign são center ou middle.
+		public Vector2 pos; 
 		public Vector2 size;
-		public Vector2 pos;
 		public Texture2D background;
 		public Color backgroundColor = Color.Transparent;
 		public Color foregroundColor = Color.White;
@@ -21,17 +24,19 @@ namespace Minimax
 		protected int[] padding = new int[4] {0,0,0,0}; //left,top,right,bottom
 		public DivElement parent = null;
 		protected List<DivElement> children = new List<DivElement>();
-		protected Game1 game;
 
-		public bool clicked = false;
-		public bool active = false;
-		public bool disabled = false;
-		public bool display = true;
+		public bool clicked = false; //foi clicado (e continua sendo)
+		public bool active = false; //está ativo
+		public bool disabled = false; //não responde a eventos mas está visível
+		public bool display = true; //não está visíviel
+		public bool mouseOver = false; //o mouse está sobre
+
 		public delegate void EventHandler(DivElement origin, Event e);
 		public event EventHandler Click;
-		public event EventHandler MouseOver;
 		public event EventHandler MousePressed;
 		public event EventHandler MouseReleased;
+		public event EventHandler MouseOver;
+		public event EventHandler MouseOut;
 		public event EventHandler Change;
 
 
@@ -58,7 +63,7 @@ namespace Minimax
 
 		public void Margin(params int[] m){
 			if (m.Length == 1) {
-				margin = new int[4]{ m [0], m [0], m [0], m [0] };
+				margin = new int[4]{ m[0], m[0], m[0], m[0] };
 			} else {
 				for (int i = 0; i < m.Length; i++) {
 					margin [i] = m [i];
@@ -109,7 +114,13 @@ namespace Minimax
 					}
 				}
 			} else if (align == "right") {
-				
+				//pos ainda é considerada da esquerda p/ direita, cima p/ baixo. modificar isso.
+				if (parent == null || position == "absolute") {
+					actualPos.X += game.GraphicsDevice.Viewport.Width - (size.X + margin[2] + padding[2]);
+				} else if (parent != null && position == "relative") {
+					//recalcular
+					actualPos.X = (parentPos.X + parent.padding[2]+parent.size.X)-(size.X + margin[2] + padding[2]);
+				}
 			}
 
 			//calcula actualPos.Y
@@ -130,7 +141,14 @@ namespace Minimax
 					}
 				}
 			} else if (vAlign == "bottom") {
-
+				//pos ainda é considerada da esquerda p/ direita, cima p/ baixo. modificar isso.
+				if (parent == null || position == "absolute") {
+					actualPos.Y += game.GraphicsDevice.Viewport.Height - (size.Y + margin[3] + padding[3]);
+					actualPos.Y += margin[1];
+				} else if (parent != null && position == "relative") {
+					//depois
+					//actualPos.Y = margin[1] + parentPos.Y + parent.padding[1];
+				}
 			}
 			return actualPos;
 		}
@@ -141,10 +159,12 @@ namespace Minimax
 		}
 
 		public bool detectInteracion(Vector2 p){
-			Vector2 aSize = calcSize();
-			Vector2 aPos = calcPosition();
-			if ((p.X >= aPos.X && p.X <= aPos.X + aSize.X) && (p.Y >= aPos.Y && p.Y <= aPos.Y + aSize.Y)) {
-				return true;
+			if(!disabled) {
+				Vector2 aSize = calcSize();
+				Vector2 aPos = calcPosition();
+				if((p.X >= aPos.X && p.X <= aPos.X + aSize.X) && (p.Y >= aPos.Y && p.Y <= aPos.Y + aSize.Y)) {
+					return true;
+				}
 			}
 			return false;
 		}
@@ -154,16 +174,18 @@ namespace Minimax
 				Click += callback;
 			} else if (type.ToLower() == "mousepressed"){
 				MousePressed += callback;	
-			} else if (type.ToLower() == "released"){
+			} else if (type.ToLower() == "mousereleased"){
 				MouseReleased += callback;
 			} else if (type.ToLower() == "mouseover") {
 				MouseOver += callback;
-			}
+			} else if (type.ToLower() == "mouseout") {
+				MouseOut += callback;
+			} 
 		}
 
 		public virtual bool OnMousePressed(Event e, bool fireClick=true){
 			if (detectInteracion(e.vVector)) {
-				if (!active && fireClick){
+				if (!clicked && fireClick){
 					return OnClick(e);
 				}
 				active = true;
@@ -192,6 +214,24 @@ namespace Minimax
 			return false;
 		}
 
+		public virtual bool OnMouseOver(Event e){
+			if (detectInteracion(e.vVector) && !mouseOver) {
+				mouseOver = true;
+				MouseOver(this, e);
+				return true;
+			}
+			return false;
+		}
+
+		public virtual bool OnMouseOut(Event e){
+			if (!detectInteracion(e.vVector) && mouseOver) {
+				mouseOver = false;
+				MouseOut(this, e);
+				return true;
+			}
+			return false;
+		}
+
 		public virtual void DrawText(){}
 
 		public virtual void DrawSprite(){
@@ -214,7 +254,6 @@ namespace Minimax
 
 		public void Draw(){
 			if (display) {
-				
 				DrawSprite();
 				DrawText();
 

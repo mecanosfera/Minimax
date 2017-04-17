@@ -13,7 +13,7 @@ namespace Minimax
 
 		void Draw();
 
-		void Exit();
+		void Exit(string newState=null);
 	}
 }
 

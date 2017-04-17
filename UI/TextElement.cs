@@ -47,7 +47,7 @@ namespace Minimax
 				textSize = font.MeasureString(text);
 			} else if (f == null && text != "") {
 				font = game.defaultFont;
-				textSize = font.MeasureString (text);
+				textSize = font.MeasureString(text);
 			}
 			size = textSize;
 			background = bg;

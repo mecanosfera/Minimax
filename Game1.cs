@@ -40,11 +40,7 @@ namespace Minimax
 			player1 = new Player(this, 1, false);
 			player2 = new Player(this, 2, false);
 			actualPlayer = player1;
-			GameMode = new StateMachine(new Dictionary<string,IState>(){
-				{"start",	new StartGameState (this,"start")},
-				{"play",	new PlayGameState (this,"play")},
-				{"end",		new EndGameState (this,"end")}
-			});
+
 		}
 
 
@@ -65,6 +61,12 @@ namespace Minimax
 			defaultFont = arial12;
 			tested = new DivElement (this, new Vector2 (64, 64),new Vector2(10,10), cellX);
 			textd = new TextElement (this,"teste!",new Vector2(100,50),new Vector2(90,90),arial12,cellEmpty);
+
+			GameMode = new StateMachine(new Dictionary<string,IState>(){
+				{"start",	new StartGameState (this,"start")},
+				{"play",	new PlayGameState (this,"play")},
+				{"end",		new EndGameState (this,"end")}
+			}, "start");
 		}
 
 		public void df(Vector2 z= default(Vector2)){
@@ -83,8 +85,14 @@ namespace Minimax
 				Exit();
 
 
+			GameMode.Update();
+
+
 			if (win == 0)
 			{
+
+
+
 
 				if (actualPlayer.npc)
 				{
@@ -172,7 +180,9 @@ namespace Minimax
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
 
-			tested.Align ("center", "middle");
+			GameMode.Draw();
+
+			/*tested.Align ("center", "middle");
 			tested.Padding (50, 0, 1, 0);
 			tested.AddEventListener("click", delegate(DivElement d, Event e){
 				
@@ -266,7 +276,7 @@ namespace Minimax
 					SpriteEffects.None,
 					0f                                                  //depth
 				);
-			}
+			}*/
 
 			spriteBatch.End();
 			base.Draw(gameTime);

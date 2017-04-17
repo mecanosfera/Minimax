@@ -17,7 +17,7 @@ namespace Minimax
 			cell = c;
 		}
 
-		public override bool OnClick(Event e){
+		/*public override bool OnClick(Event e){
 			if (detectInteracion(e.vVector)) {
 				if (!active) {
 					if (game.board.cell [cell[0], cell[1]] == 0) {
@@ -27,10 +27,10 @@ namespace Minimax
 				}
 			}
 			return false;
-		}
+		}*/
 
 		public void updateCell(int player){
-			game.board.cell [cell[0], cell[1]] = player;
+			game.board.cell[cell[0], cell[1]] = player;
 			active = true;
 			if (game.actualPlayer.playerNumber == 1) {
 				background = game.cellO;

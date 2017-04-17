@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace Minimax
 {
@@ -9,6 +11,7 @@ namespace Minimax
 		public List<DivElement> elements = new List<DivElement>();
 		public string name;
 		public Game1 game;
+		public Vector2 mousePos = new Vector2(0,0);
 
 		public GameState (Game1 g, string n)
 		{
@@ -22,9 +25,28 @@ namespace Minimax
 
 		public virtual void Enter(string lastState=null){}
 			
-		public virtual void HandleInput(){}
+		public virtual void HandleInput(){
+			Vector2 newMousePos = new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
+			Event mousePosEvent = new Event(newMousePos);
 
-		public virtual void Update(){}
+			foreach(DivElement e in elements) {
+				if(newMousePos != mousePos) {
+					e.OnMouseOver(mousePosEvent);
+					e.OnMouseOut(mousePosEvent);
+				}
+				if(Mouse.GetState().LeftButton == ButtonState.Pressed) {
+					e.OnMousePressed(mousePosEvent);
+				}
+				if(Mouse.GetState().LeftButton == ButtonState.Released) {
+					e.OnMouseReleased(mousePosEvent);
+				}
+			}
+			mousePos = newMousePos;
+		}
+
+		public virtual void Update(){
+			HandleInput();
+		}
 
 		public virtual void Draw(){
 			foreach (DivElement e in elements) {
@@ -34,7 +56,7 @@ namespace Minimax
 			}
 		}
 
-		public virtual void Exit(){}
+		public virtual void Exit(string newState=null){}
 	}
 }
 

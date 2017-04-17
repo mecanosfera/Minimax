@@ -9,9 +9,15 @@ namespace Minimax
 		protected Dictionary<string,IState> states;
 		public IState activeState;
 
-		public StateMachine (Dictionary<string,IState> s)
+		public StateMachine (Dictionary<string,IState> s=null, string initialState=null)
 		{
-			states = s;
+			if(s != null) {
+				states = s;
+				if(initialState != null) {
+					activeState = states[initialState];
+					activeState.Enter();
+				}
+			}
 		}
 
 
@@ -23,6 +29,10 @@ namespace Minimax
 
 		public void add(string state, IState state_){
 			states[state] = state_;
+			if(activeState == null) {
+				activeState = state_;
+				activeState.Enter();
+			}
 		}
 
 		public IState get(string state){
@@ -30,11 +40,15 @@ namespace Minimax
 		}
 
 		public void Update(){
-			activeState.Update();
+			if(activeState != null) {
+				activeState.Update();
+			}
 		}
 
 		public void Draw(){
-			activeState.Draw();
+			if(activeState != null) {
+				activeState.Draw();
+			}
 		}
 
 
