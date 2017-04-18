@@ -66,7 +66,7 @@ namespace Minimax
 
 			quitMenu = new ButtonElement(game,"Quit to Menu",new Vector2(50,20));
 			quitMenu.Align("right", "bottom");
-			quitMenu.Margin(20);
+			//quitMenu.Margin(0);
 			quitMenu.AddEventListener("click",delegate(DivElement origin, Event e) {
 				game.GameMode.Change("start");
 			});
@@ -82,9 +82,11 @@ namespace Minimax
 			win = 0;
 			if(lastState == "end") {
 				score = ((EndGameState)game.GameMode.get("end")).score;
-			} else {
-				score = new int[3]{ 0, 0, 0 };
-			}
+			} else
+            {
+                score = ((PlayGameState)game.GameMode.get("play")).score;
+                //score = new int[3]{ 0, 0, 0 };
+            }
 		}
 
 		public override void Update(){
@@ -105,7 +107,8 @@ namespace Minimax
 				} else {
 					score[2]++;
 				}
-				game.GameMode.Change("end");
+                Console.WriteLine(score[0]+" "+ score[1] + " "+ score[2]);
+				game.GameMode.Change("play");
 			}
 			
 		}

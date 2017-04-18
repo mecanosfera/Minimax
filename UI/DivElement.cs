@@ -20,10 +20,10 @@ namespace Minimax
 		public string align = "left"; //left, right, center;
 		public string vAlign = "top"; //top, bottom, middle;
 		public string position = "relative"; //relative, absolute, inherit
-		protected int[] margin = new int[4] {0,0,0,0}; //left,top,right,bottom
-		protected int[] padding = new int[4] {0,0,0,0}; //left,top,right,bottom
+		public int[] margin = new int[4] {0,0,0,0}; //left,top,right,bottom
+		public int[] padding = new int[4] {0,0,0,0}; //left,top,right,bottom
 		public DivElement parent = null;
-		protected List<DivElement> children = new List<DivElement>();
+		public List<DivElement> children = new List<DivElement>();
 
 		public bool clicked = false; //foi clicado (e continua sendo)
 		public bool active = false; //está ativo
@@ -32,12 +32,12 @@ namespace Minimax
 		public bool mouseOver = false; //o mouse está sobre
 
 		public delegate void EventHandler(DivElement origin, Event e);
-		public event EventHandler Click;
-		public event EventHandler MousePressed;
-		public event EventHandler MouseReleased;
-		public event EventHandler MouseOver;
-		public event EventHandler MouseOut;
-		public event EventHandler Change;
+        protected event EventHandler Click = delegate(DivElement origin, Event e) { };
+        protected event EventHandler MousePressed = delegate (DivElement origin, Event e) { };
+        protected event EventHandler MouseReleased = delegate (DivElement origin, Event e) { };
+        protected event EventHandler MouseOver = delegate (DivElement origin, Event e) { };
+        protected event EventHandler MouseOut = delegate (DivElement origin, Event e) { };
+        protected event EventHandler Change = delegate (DivElement origin, Event e) { };
 
 
 		public DivElement (Game1 g, Vector2 s, Texture2D bg=null)
@@ -183,11 +183,13 @@ namespace Minimax
 			} 
 		}
 
-		public virtual bool OnMousePressed(Event e, bool fireClick=true){
-			if (detectInteracion(e.vVector)) {
-				if (!clicked && fireClick){
-					return OnClick(e);
-				}
+		public virtual bool OnMousePressed(Event e, bool fireClick=true){            
+            if (detectInteracion(e.vVector)) {
+                Console.WriteLine("pressed");
+                if (!clicked && fireClick){
+                    Console.WriteLine("click");
+                    OnClick(e);
+                }
 				active = true;
 				clicked = true;
 				MousePressed (this, e);
@@ -197,7 +199,7 @@ namespace Minimax
 		}
 
 		public virtual bool OnMouseReleased(Event e){
-			if (detectInteracion(e.vVector)) {
+			if (detectInteracion(e.vVector) && MouseReleased!=null) {
 				active = false;
 				clicked = false;
 				MouseReleased (this, e);
@@ -217,6 +219,7 @@ namespace Minimax
 		public virtual bool OnMouseOver(Event e){
 			if (detectInteracion(e.vVector) && !mouseOver) {
 				mouseOver = true;
+                Console.WriteLine("entrou");
 				MouseOver(this, e);
 				return true;
 			}
@@ -245,7 +248,7 @@ namespace Minimax
 					Vector2.Zero,
 					0.0f,
 					new Vector2(calcSize().X / background.Width, calcSize().Y / background.Height),
-					Color.White,
+					foregroundColor,
 					SpriteEffects.None,
 					0.0f
 				);

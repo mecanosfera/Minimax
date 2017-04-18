@@ -6,10 +6,10 @@ namespace Minimax
 	public class StateMachine
 	{
 
-		protected Dictionary<string,IState> states;
-		public IState activeState;
+		protected Dictionary<string,GameState> states;
+		public GameState activeState;
 
-		public StateMachine (Dictionary<string,IState> s=null, string initialState=null)
+		public StateMachine (Dictionary<string,GameState> s=null, string initialState=null)
 		{
 			if(s != null) {
 				states = s;
@@ -22,12 +22,13 @@ namespace Minimax
 
 
 		public void Change(string newState){
-			activeState.Exit();
+            string lastState = activeState.name;
+			activeState.Exit(newState);
 			activeState = states[newState];
-			activeState.Enter();
+			activeState.Enter(lastState);
 		}
 
-		public void add(string state, IState state_){
+		public void add(string state, GameState state_){
 			states[state] = state_;
 			if(activeState == null) {
 				activeState = state_;
@@ -35,7 +36,7 @@ namespace Minimax
 			}
 		}
 
-		public IState get(string state){
+		public GameState get(string state){
 			return states[state];
 		}
 

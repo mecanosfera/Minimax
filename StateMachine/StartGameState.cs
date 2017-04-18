@@ -31,12 +31,12 @@ namespace Minimax
 				game.GameMode.Change("play");
 			});
 
-			int leftMargin = 50;
-			int rightMargin = 50;
+			int leftMargin = 80;
+			int rightMargin = 80;
 			int topMargin = 30;
 
-			btPlayer1 = new ButtonElement(game, "", new Vector2(game.cellO.Width, game.cellO.Height), new Vector2(10, 10), null, game.cellO);
-			btPlayer2 = new ButtonElement(game, "", new Vector2(game.cellX.Width, game.cellX.Height), new Vector2(10, 10), null, game.cellX);
+			btPlayer1 = new ButtonElement(game, "", new Vector2(game.cellO.Width, game.cellO.Height), new Vector2(0, 0), null, game.cellO);
+			btPlayer2 = new ButtonElement(game, "", new Vector2(game.cellX.Width, game.cellX.Height), new Vector2(0, 0), null, game.cellX);
 			tipoPlayer1 = new TextElement(game, "player", new Vector2(game.cellEmpty.Width, 20), new Vector2(70, 70));
 			tipoPlayer2 = new TextElement(game, "player", new Vector2(game.cellEmpty.Width, 20), new Vector2(70, 70));
 			tipoPlayer1.align = "left";
@@ -45,19 +45,21 @@ namespace Minimax
 			tipoPlayer2.textAlign = "center";
 			tipoPlayer1.Margin(leftMargin, topMargin, 0, 0);
 			tipoPlayer2.Margin(0, topMargin, rightMargin, 0);
-			btPlayer1.Margin(leftMargin, topMargin, 0, 0);
-			btPlayer2.Margin(0, topMargin, rightMargin, 0);
+			btPlayer1.Margin(leftMargin, topMargin+40, 0, 0);
+			btPlayer2.Margin(0, topMargin+40, rightMargin, 0);
+            btPlayer2.align = "right";
 				
-			btSubDifPlayer1 = new ButtonElement(game,"-",new Vector2(20,20));
-			difPlayer1 = new TextElement(game,game.player1.difficulty+"",new Vector2(30,20),new Vector2(30,0));
-			btAddDifPlayer1 = new ButtonElement(game,"+",new Vector2(20,20),new Vector2(70,0));
+			btSubDifPlayer1=new ButtonElement(game,"-",new Vector2(20,20));
+			difPlayer1 =    new TextElement(game,game.player1.difficulty+"",new Vector2(30,20));
+			btAddDifPlayer1=new ButtonElement(game,"+",new Vector2(20,20));
 			btSubDifPlayer1.align="left";
-			btSubDifPlayer1.Margin(leftMargin,topMargin,0,0);
 			difPlayer1.align="left";
-			difPlayer1.Margin(leftMargin,topMargin,0,0);
 			btAddDifPlayer1.align="left";
+            btSubDifPlayer1.Margin(leftMargin, topMargin, 0, 0);
+            difPlayer1.Margin(leftMargin+/*(int)btSubDifPlayer1.calcSize().X*/+btSubDifPlayer1.margin[0], topMargin, 0, 0);
+            btAddDifPlayer1.Margin(leftMargin+ /*(int)difPlayer1.calcSize().X +*/ difPlayer1.margin[0], topMargin, 0, 0);
 
-			btSubDifPlayer2 = new ButtonElement(game,"-",new Vector2(20,20));
+            btSubDifPlayer2 = new ButtonElement(game,"-",new Vector2(20,20));
 			difPlayer2 = new TextElement(game,game.player2.difficulty+"",new Vector2(30,20),new Vector2(30,0));
 			btAddDifPlayer2 = new ButtonElement(game,"+",new Vector2(20,20),new Vector2(70,0));
 			btSubDifPlayer2.align="right";
@@ -67,7 +69,14 @@ namespace Minimax
 			btAddDifPlayer2.align="right";
 
 
-			btPlayer1.AddEventListener("click",delegate(DivElement origin, Event e) {
+            btAddDifPlayer1.display = false;
+            btAddDifPlayer2.display = false;
+            btSubDifPlayer1.display = false;
+            btSubDifPlayer2.display = false;
+            difPlayer1.display = false;
+            difPlayer2.display = false;
+
+            btPlayer1.AddEventListener("click",delegate(DivElement origin, Event e) {
 				if(game.player1.npc){
 					game.player1.npc = false;
 					tipoPlayer1.text = "player";
@@ -82,7 +91,16 @@ namespace Minimax
 					difPlayer1.display = true;
 				}
 			});
-			btPlayer2.AddEventListener("click",delegate(DivElement origin, Event e) {
+
+            btPlayer1.AddEventListener("mouseover", delegate (DivElement origin, Event e){
+                origin.foregroundColor = Color.Red;
+            });
+
+            btPlayer1.AddEventListener("mouseout", delegate (DivElement origin, Event e) {
+                origin.foregroundColor = Color.White;
+            });
+
+            btPlayer2.AddEventListener("click",delegate(DivElement origin, Event e) {
 				if(game.player2.npc){
 					game.player2.npc = false;
 					tipoPlayer2.text = "player";
@@ -100,25 +118,25 @@ namespace Minimax
 
 			btSubDifPlayer1.AddEventListener("mousepressed",delegate(DivElement origin, Event e) {
 				if(game.player1.difficulty>0){
-					game.player1.difficulty--;
+					game.player1.difficulty-=10;
 					difPlayer1.text = game.player1.difficulty+"";
 				}
 			});
 			btSubDifPlayer2.AddEventListener("mousepressed",delegate(DivElement origin, Event e) {
 				if(game.player2.difficulty>0){
-					game.player2.difficulty--;
+					game.player2.difficulty-=10;
 					difPlayer2.text = game.player2.difficulty+"";
 				}
 			});
 			btAddDifPlayer1.AddEventListener("mousepressed",delegate(DivElement origin, Event e) {
 				if(game.player1.difficulty<100){
-					game.player1.difficulty++;
+					game.player1.difficulty+=10;
 					difPlayer1.text = game.player1.difficulty+"";
 				}
 			});
 			btAddDifPlayer2.AddEventListener("mousepressed",delegate(DivElement origin, Event e) {
 				if(game.player2.difficulty<100){
-					game.player2.difficulty++;
+					game.player2.difficulty+=10;
 					difPlayer2.text = game.player2.difficulty+"";
 				}
 			});

@@ -31,3 +31,9 @@
 #begin Sprites/Char33.png
 /copy:Sprites/Char33.png
 
+#begin Fonts/Arial14Bold.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Arial14Bold.spritefont
+

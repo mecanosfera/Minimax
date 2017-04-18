@@ -10,6 +10,7 @@ namespace Minimax
 
 		public EndGameState(Game1 g, string n): base(g,n)
 		{
+
 		}
 
 

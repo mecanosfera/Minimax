@@ -22,7 +22,8 @@ namespace Minimax
 
 
 		public SpriteFont arial12;
-		public SpriteFont defaultFont;
+        public SpriteFont arial14;
+        public SpriteFont defaultFont;
 		public DivElement tested;
 		public TextElement textd;
 
@@ -58,11 +59,12 @@ namespace Minimax
 			cellO = Content.Load<Texture2D>("Sprites/cello");
 			gameDraw = Content.Load<Texture2D>("Sprites/Char33");
 			arial12 = Content.Load<SpriteFont> ("Fonts/Arial12");
-			defaultFont = arial12;
+            arial14 = Content.Load<SpriteFont>("Fonts/Arial14Bold");
+            defaultFont = arial14;
 			tested = new DivElement (this, new Vector2 (64, 64),new Vector2(10,10), cellX);
 			textd = new TextElement (this,"teste!",new Vector2(100,50),new Vector2(90,90),arial12,cellEmpty);
 
-			GameMode = new StateMachine(new Dictionary<string,IState>(){
+			GameMode = new StateMachine(new Dictionary<string,GameState>(){
 				{"start",	new StartGameState (this,"start")},
 				{"play",	new PlayGameState (this,"play")},
 				{"end",		new EndGameState (this,"end")}
