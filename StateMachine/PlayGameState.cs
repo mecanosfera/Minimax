@@ -102,10 +102,13 @@ namespace Minimax
 			} else {
 				if(win == 3) {
 					score[0]++;
+					scoreEmpate.text = "Empate: "+score[0];
 				} else if(win == 1) {
 					score[1]++;
+					scoreP1.text = "O: " + score[1];
 				} else {
 					score[2]++;
+					scoreP2.text = "X: "+score[2];
 				}
                 Console.WriteLine(score[0]+" "+ score[1] + " "+ score[2]);
 				game.GameMode.Change("play");
