@@ -12,15 +12,13 @@ namespace Minimax
 		public int difficulty = 100; //define a aleatoriedade do npc, de 0 a 100
         public Game1 game;
 
-		public Player(Game1 game, int number, bool npc, int random=0)
+		public Player(Game1 game, int number, bool npc, int random=100)
 		{
 			playerNumber = number;
-			if (playerNumber == 1)
-			{
+			if (playerNumber == 1){
 				opponentNumber = 2;
 			}
-			else 
-			{ 
+			else { 
 				opponentNumber = 1;
 			}
 
@@ -32,7 +30,7 @@ namespace Minimax
 
 		public int[] bestMove(bool alphabeta=false)
 		{
-
+			Console.WriteLine("in minimax");
 			Board board = game.board;
 			int[] nextMove = new int[2] { -1, -1 };
 			int bestVal = -10;
@@ -43,8 +41,8 @@ namespace Minimax
 			/*se optar por Minimax o loop passa por cada célula livre e calcula o valor
 			do Minimax, guardando o maior valor a célula correspondente.*/
 			if (difficulty == 100 || r.Next(1, 101) <= difficulty) {
-				for (int y = 0; y < 3; y++) {
-					for (int x = 0; x < 3; x++) {
+				for (int y = 0; y < board.size; y++) {
+					for (int x = 0; x < board.size; x++) {
 						if (board.cell [x, y] == 0) {
 							
 							//faz uma cópia do board com a primeira jogada e verifica se ganha o jogo.
@@ -76,8 +74,8 @@ namespace Minimax
 			} else {
 				//escolhe aleatoriamente uma das células livres 
 				int next = r.Next (0, board.getLeft ());
-				for (int y = 0; y < 3; y++) {
-					for (int x = 0; x < 3; x++) {
+				for (int y = 0; y < board.size; y++) {
+					for (int x = 0; x < board.size; x++) {
 						if (board.cell[x, y] == 0) {
 							if (next == 0) {
 								nextMove[0] = x;
@@ -89,6 +87,7 @@ namespace Minimax
 					}
 				}
 			}
+			Console.WriteLine("out minimax");
 			return nextMove;
 		}
 
@@ -97,28 +96,22 @@ namespace Minimax
 		}
 
 
-		public int Minimax(Board board, int depth, bool isMax)
-		{
-			if(board.IsGameOver() || depth == 0)
-			{
+		public int Minimax(Board board, int depth, bool isMax){
+			if(board.IsGameOver() || depth == 0){
 				return board.GetScore(this);
 			}
 
 			int value;
-			if(!isMax)
-			{
+			if(!isMax){
 				value = 9999999;
 				List<Board> possibilities = board.GetPossibilities(opponentNumber);
-				foreach(Board p in possibilities)
-				{
+				foreach(Board p in possibilities){
 					value = Math.Min(value, Minimax(p, depth - 1, true));
 				}
-			} else
-			{
+			} else{
 				value = -9999999;
 				List<Board> possibilities = board.GetPossibilities(playerNumber);
-				foreach (Board p in possibilities)
-				{
+				foreach (Board p in possibilities){
 					value = Math.Max(value, Minimax(p, depth - 1, false));
 				}
 			}

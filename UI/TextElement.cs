@@ -19,10 +19,10 @@ namespace Minimax
 			text = t;
 			if (f != null && text != "") {
 				font = f;
-				textSize = font.MeasureString (text);
+				textSize = font.MeasureString(text);
 			} else if (f == null && text != "") {
 				font = game.defaultFont;
-				textSize = font.MeasureString (text);
+				textSize = font.MeasureString(text);
 			}
 		}
 
@@ -33,7 +33,7 @@ namespace Minimax
 				textSize = font.MeasureString(text);
 			} else if (f == null && text != "") {
 				font = game.defaultFont;
-				textSize = font.MeasureString (text);
+				textSize = font.MeasureString(text);
 			}
 			size = textSize;
 		}
@@ -55,15 +55,15 @@ namespace Minimax
 
 		public Vector2 calcTextPosition(){
 			Vector2 actualPos = calcPosition();
-
+			textSize = font.MeasureString(text);
 			if (textAlign == "left") {
 					return new Vector2(actualPos.X + padding[0], actualPos.Y + padding[1]); 
 			} else if (textAlign == "center") {
-				if (textSize.X >= size.X) {
-					return new Vector2(actualPos.X + padding[0], actualPos.Y + padding[1]);
-				} else {
+				//if (textSize.X >= size.X) {
+				//	return new Vector2(actualPos.X + padding[0], actualPos.Y + padding[1]);
+				//} else {
 					return new Vector2((actualPos.X+(size.X-textSize.X)*0.5f) + padding[0],actualPos.Y+padding[1]);
-				}
+				//}
 			} else if (textAlign == "right") {
 
 			}

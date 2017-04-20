@@ -20,7 +20,14 @@ namespace Minimax
 		}
 
 		public virtual void AddElement(DivElement e){
-			elements.Add (e);
+			elements.Add(e);
+		}
+
+		public virtual void Append(DivElement e){
+			elements.Add(e);
+			foreach(DivElement ch in e.children){
+				elements.Add(ch);
+			}
 		}
 
 		public virtual void Enter(string lastState=null){}
@@ -50,7 +57,7 @@ namespace Minimax
 
 		public virtual void Draw(){
 			foreach (DivElement e in elements) {
-				if (e.parent == null) {
+				if (e.parentNode == null) {
 					e.Draw();
 				}
 			}

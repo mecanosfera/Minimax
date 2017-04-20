@@ -11,84 +11,81 @@ namespace Minimax
 	{
 
 		ButtonElement btStartGame;
+		DivElement divPlayer1;
+		DivElement divPlayer2;
 		ButtonElement btPlayer1; // O
 		ButtonElement btPlayer2; // X
 		TextElement tipoPlayer1;
 		TextElement tipoPlayer2;
-		ButtonElement btAddDifPlayer1;
-		ButtonElement btAddDifPlayer2;
-		ButtonElement btSubDifPlayer1;
-		ButtonElement btSubDifPlayer2;
-		TextElement difPlayer1;
-		TextElement difPlayer2;
+		TextElement labelDifPlayer1;
+		TextElement labelDifPlayer2;
+		ButtonElement btDifPlayer1;
+		ButtonElement btDifPlayer2;
+		enum difficulty {easy=0,medium=50,hard=100};
 
 
 		public StartGameState(Game1 g, string n): base(g,n)
 		{
+			
 			btStartGame = new ButtonElement(game,"start");
+			divPlayer1 = new DivElement(game,new Vector2(200,300)/*,game.cellEmpty*/);
+			divPlayer2 = new DivElement(game,new Vector2(200,300)/*,game.cellEmpty*/);
+			btPlayer1 = new ButtonElement(game, "", new Vector2(game.cellO.Width, game.cellO.Height), new Vector2(0, 0), null, game.cellO);
+			btPlayer2 = new ButtonElement(game, "", new Vector2(game.cellX.Width, game.cellX.Height), new Vector2(0, 0), null, game.cellX);
+			tipoPlayer1 = new TextElement(game, "player 1");
+			tipoPlayer2 = new TextElement(game, "player 2");
+			labelDifPlayer1 = new TextElement(game, "dificuldade:");
+			labelDifPlayer2 = new TextElement(game, "dificuldade:");
+			btDifPlayer1 = new ButtonElement(game, "hard");
+			btDifPlayer2 = new ButtonElement(game, "hard");
+
 			btStartGame.Align("center","bottom");
+			divPlayer1.align = "left";
+			divPlayer1.Margin(60, 60, 0, 0);
+			divPlayer2.align = "right";
+			divPlayer2.Margin(0, 60, 60, 0);
+
+			tipoPlayer1.align = "center";
+			tipoPlayer1.textAlign = "center";
+			tipoPlayer1.Margin(0, 60+game.cellO.Height, 0, 0);
+			tipoPlayer2.align = "center";
+			tipoPlayer2.textAlign = "center";
+			tipoPlayer2.Margin(0, 60+game.cellX.Height, 0, 0);
+
+			btPlayer1.Margin(0,50,0,0);
+			btPlayer1.align="center";
+			btPlayer2.Margin(0,50,0,0);
+			btPlayer2.align="center";
+
+			labelDifPlayer1.align = "center";
+			labelDifPlayer1.textAlign = "center";
+			labelDifPlayer1.Margin(0,10+tipoPlayer1.margin[1]+(int)tipoPlayer1.size.Y,0,0);
+			labelDifPlayer2.align = "center";
+			labelDifPlayer2.textAlign = "center";
+			labelDifPlayer2.Margin(0,10+tipoPlayer2.margin[1]+(int)tipoPlayer2.size.Y,0,0);
+
+			btDifPlayer1.align="center";
+			btDifPlayer1.textAlign="center";
+			btDifPlayer1.Margin(0,10+labelDifPlayer1.margin[1]+(int)labelDifPlayer1.size.Y,0,0);
+			btDifPlayer1.display = false;
+			btDifPlayer2.align="center";
+			btDifPlayer2.textAlign="center";
+			btDifPlayer2.Margin(0,10+labelDifPlayer2.margin[1]+(int)labelDifPlayer2.size.Y,0,0);
+			btDifPlayer2.display = false;
+
 			btStartGame.AddEventListener("click",delegate(DivElement origin, Event e) {
 				game.GameMode.Change("play");
 			});
 
-			int leftMargin = 80;
-			int rightMargin = 80;
-			int topMargin = 30;
-
-			btPlayer1 = new ButtonElement(game, "", new Vector2(game.cellO.Width, game.cellO.Height), new Vector2(0, 0), null, game.cellO);
-			btPlayer2 = new ButtonElement(game, "", new Vector2(game.cellX.Width, game.cellX.Height), new Vector2(0, 0), null, game.cellX);
-			tipoPlayer1 = new TextElement(game, "player", new Vector2(game.cellEmpty.Width, 20), new Vector2(70, 70));
-			tipoPlayer2 = new TextElement(game, "player", new Vector2(game.cellEmpty.Width, 20), new Vector2(70, 70));
-			tipoPlayer1.align = "left";
-			tipoPlayer2.align = "right";
-			tipoPlayer1.textAlign = "center";
-			tipoPlayer2.textAlign = "center";
-			tipoPlayer1.Margin(leftMargin, topMargin, 0, 0);
-			tipoPlayer2.Margin(0, topMargin, rightMargin, 0);
-			btPlayer1.Margin(leftMargin, topMargin+40, 0, 0);
-			btPlayer2.Margin(0, topMargin+40, rightMargin, 0);
-            btPlayer2.align = "right";
-				
-			btSubDifPlayer1=new ButtonElement(game,"-",new Vector2(20,20));
-			difPlayer1 =    new TextElement(game,game.player1.difficulty+"",new Vector2(30,20));
-			btAddDifPlayer1=new ButtonElement(game,"+",new Vector2(20,20));
-			btSubDifPlayer1.align="left";
-			difPlayer1.align="left";
-			btAddDifPlayer1.align="left";
-            btSubDifPlayer1.Margin(leftMargin, topMargin, 0, 0);
-            difPlayer1.Margin(leftMargin+/*(int)btSubDifPlayer1.calcSize().X*/+btSubDifPlayer1.margin[0], topMargin, 0, 0);
-            btAddDifPlayer1.Margin(leftMargin+ /*(int)difPlayer1.calcSize().X +*/ difPlayer1.margin[0], topMargin, 0, 0);
-
-            btSubDifPlayer2 = new ButtonElement(game,"-",new Vector2(20,20));
-			difPlayer2 = new TextElement(game,game.player2.difficulty+"",new Vector2(30,20),new Vector2(30,0));
-			btAddDifPlayer2 = new ButtonElement(game,"+",new Vector2(20,20),new Vector2(70,0));
-			btSubDifPlayer2.align="right";
-			btSubDifPlayer2.Margin(0,topMargin,rightMargin,0);
-			difPlayer2.align="right";
-			difPlayer2.Margin(0,topMargin,rightMargin,0);
-			btAddDifPlayer2.align="right";
-
-
-            btAddDifPlayer1.display = false;
-            btAddDifPlayer2.display = false;
-            btSubDifPlayer1.display = false;
-            btSubDifPlayer2.display = false;
-            difPlayer1.display = false;
-            difPlayer2.display = false;
-
             btPlayer1.AddEventListener("click",delegate(DivElement origin, Event e) {
 				if(game.player1.npc){
 					game.player1.npc = false;
-					tipoPlayer1.text = "player";
-					btAddDifPlayer1.display = false;
-					btSubDifPlayer1.display = false;
-					difPlayer1.display = false;
+					tipoPlayer1.text = "player 1";
+					btDifPlayer1.display=false;
 				} else {
 					game.player1.npc = true;
 					tipoPlayer1.text = "npc";
-					btAddDifPlayer1.display = true;
-					btSubDifPlayer1.display = true;
-					difPlayer1.display = true;
+					btDifPlayer1.display=true;
 				}
 			});
 
@@ -103,56 +100,74 @@ namespace Minimax
             btPlayer2.AddEventListener("click",delegate(DivElement origin, Event e) {
 				if(game.player2.npc){
 					game.player2.npc = false;
-					tipoPlayer2.text = "player";
-					btAddDifPlayer2.display = false;
-					btSubDifPlayer2.display = false;
-					difPlayer2.display = false;
+					tipoPlayer2.text = "player 2";
+					btDifPlayer2.display=false;
 				} else {
 					game.player2.npc = true;
 					tipoPlayer2.text = "npc";
-					btAddDifPlayer2.display = true;
-					btSubDifPlayer2.display = true;
-					difPlayer2.display = true;
+					btDifPlayer2.display=true;
 				}
 			});
 
-			btSubDifPlayer1.AddEventListener("mousepressed",delegate(DivElement origin, Event e) {
-				if(game.player1.difficulty>0){
-					game.player1.difficulty-=10;
-					difPlayer1.text = game.player1.difficulty+"";
-				}
+			btPlayer2.AddEventListener("mouseover", delegate (DivElement origin, Event e){
+				origin.foregroundColor = Color.Purple;
 			});
-			btSubDifPlayer2.AddEventListener("mousepressed",delegate(DivElement origin, Event e) {
-				if(game.player2.difficulty>0){
-					game.player2.difficulty-=10;
-					difPlayer2.text = game.player2.difficulty+"";
-				}
+
+			btPlayer2.AddEventListener("mouseout", delegate (DivElement origin, Event e) {
+				origin.foregroundColor = Color.White;
 			});
-			btAddDifPlayer1.AddEventListener("mousepressed",delegate(DivElement origin, Event e) {
-				if(game.player1.difficulty<100){
-					game.player1.difficulty+=10;
-					difPlayer1.text = game.player1.difficulty+"";
-				}
+				
+			btDifPlayer1.AddEventListener("click",delegate(DivElement origin, Event e) {
+				Console.WriteLine(game.player1.difficulty);
+				if(game.player1.difficulty==100){
+					game.player1.difficulty = 50;
+					btDifPlayer1.text="medium";
+				} else if(game.player1.difficulty==50){
+					game.player1.difficulty = 100;
+					btDifPlayer1.text="hard";
+				} 
 			});
-			btAddDifPlayer2.AddEventListener("mousepressed",delegate(DivElement origin, Event e) {
-				if(game.player2.difficulty<100){
-					game.player2.difficulty+=10;
-					difPlayer2.text = game.player2.difficulty+"";
-				}
+
+			btDifPlayer1.AddEventListener("mouseover", delegate (DivElement origin, Event e){
+				origin.foregroundColor = Color.Red;
+			});
+
+			btDifPlayer1.AddEventListener("mouseout", delegate (DivElement origin, Event e) {
+				origin.foregroundColor = Color.White;
 			});
 
 
-			AddElement(btStartGame);
-			AddElement(btPlayer1);
-			AddElement(btPlayer2);
-			AddElement(tipoPlayer1);
-			AddElement(tipoPlayer2);
-			AddElement(btSubDifPlayer1);
-			AddElement(btSubDifPlayer2);
-			AddElement(btAddDifPlayer1);
-			AddElement(btAddDifPlayer2);
-			AddElement(difPlayer1);
-			AddElement(difPlayer2);
+			btDifPlayer2.AddEventListener("click",delegate(DivElement origin, Event e) {				
+				if(game.player2.difficulty==100){
+					game.player2.difficulty = 50;
+					btDifPlayer2.text="medium";
+				} else if(game.player2.difficulty==50){
+					game.player2.difficulty = 100;
+					btDifPlayer2.text="hard";
+				} 
+			});
+
+			btDifPlayer2.AddEventListener("mouseover", delegate (DivElement origin, Event e){
+				origin.foregroundColor = Color.Purple;
+			});
+
+			btDifPlayer2.AddEventListener("mouseout", delegate (DivElement origin, Event e) {
+				origin.foregroundColor = Color.White;
+			});
+
+
+			divPlayer1.Append(btPlayer1);
+			divPlayer1.Append(tipoPlayer1);
+			//divPlayer1.Append(labelDifPlayer1);
+			divPlayer1.Append(btDifPlayer1);
+			divPlayer2.Append(btPlayer2);
+			divPlayer2.Append(tipoPlayer2);
+			//divPlayer2.Append(labelDifPlayer2);
+			divPlayer2.Append(btDifPlayer2);
+			Append(btStartGame);
+			Append(divPlayer1);
+			Append(divPlayer2);
+
 		}
 			
 	}

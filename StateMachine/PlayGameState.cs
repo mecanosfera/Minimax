@@ -10,7 +10,7 @@ namespace Minimax
 	{
 
 		//public List<CellButton> cells;
-		public CellButton[,] cells = new CellButton[3,3];
+		public CellButton[,] cells;
 		public int[] score = new int[3] {0,0,0}; //0=empate, 1=p1, 2=p2
 		public int win=0;
 		public TextElement scoreP1;
@@ -20,11 +20,12 @@ namespace Minimax
 
 		public PlayGameState(Game1 g, string n): base(g,n)
 		{
-			for (int y = 0; y < 3; y++) {
-				for (int x = 0; x < 3; x++) {
+			cells = new CellButton[game.board.size,game.board.size];
+			for (int y = 0; y < game.board.size; y++) {
+				for (int x = 0; x < game.board.size; x++) {
 					Vector2 cellPos = new Vector2(
-						x * game.cellEmpty.Width + ((game.GraphicsDevice.Viewport.Width - game.cellEmpty.Width * 3) / 2),
-						y * game.cellEmpty.Height + ((game.GraphicsDevice.Viewport.Height - (game.cellEmpty.Height * 3)) / 2)
+						x * game.cellEmpty.Width + ((game.GraphicsDevice.Viewport.Width - game.cellEmpty.Width * game.board.size) / 2),
+						y * game.cellEmpty.Height + ((game.GraphicsDevice.Viewport.Height - (game.cellEmpty.Height * game.board.size)) / 2)
 					);
 					AddElement(new DivElement(
 						game,
@@ -49,7 +50,7 @@ namespace Minimax
 					});
 
 					AddElement(cell);
-					cells [x, y] = cell;;
+					cells[x, y] = cell;
 				}
 			}
 

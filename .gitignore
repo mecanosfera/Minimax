@@ -2,3 +2,12 @@ Program.cs
 OpenTK.dll.config
 Icon.ico
 Icon.png
+Content/bin/
+Content/obj/
+Minimax.csproj
+Minimax.sln
+Minimax.userprefs
+Properties/
+bin/
+obj/
+

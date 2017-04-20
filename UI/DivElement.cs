@@ -22,7 +22,11 @@ namespace Minimax
 		public string position = "relative"; //relative, absolute, inherit
 		public int[] margin = new int[4] {0,0,0,0}; //left,top,right,bottom
 		public int[] padding = new int[4] {0,0,0,0}; //left,top,right,bottom
-		public DivElement parent = null;
+		public DivElement parentNode = null;
+		public DivElement firstNode = null;
+		public DivElement lastNode = null;
+		public DivElement previousNode = null;
+		public DivElement nextNode = null;
 		public List<DivElement> children = new List<DivElement>();
 
 		public bool clicked = false; //foi clicado (e continua sendo)
@@ -37,7 +41,7 @@ namespace Minimax
         protected event EventHandler MouseReleased = delegate (DivElement origin, Event e) { };
         protected event EventHandler MouseOver = delegate (DivElement origin, Event e) { };
         protected event EventHandler MouseOut = delegate (DivElement origin, Event e) { };
-        protected event EventHandler Change = delegate (DivElement origin, Event e) { };
+        //protected event EventHandler Change = delegate (DivElement origin, Event e) { };
 
 
 		public DivElement (Game1 g, Vector2 s, Texture2D bg=null)
@@ -58,7 +62,15 @@ namespace Minimax
 
 		public void Append(DivElement e){
 			children.Add(e);
-			e.parent = this;
+			e.parentNode = this;
+			if(firstNode == null) {
+				firstNode = e;
+				lastNode = e;
+			} else {
+				e.previousNode = lastNode;
+				lastNode.nextNode = e;
+				lastNode = e;
+			}
 		}
 
 		public void Margin(params int[] m){
@@ -91,61 +103,61 @@ namespace Minimax
 			Vector2 actualSize = calcSize();
 			Vector2 parentPos = new Vector2(0,0);
 			Vector2 parentSize = new Vector2(0,0);
-			if (parent != null) {
-				parentPos = parent.calcPosition();
-				parentSize = parent.calcSize();
+			if (parentNode != null) {
+				parentPos = parentNode.calcPosition();
+				parentSize = parentNode.calcSize();
 			}
 
 			//calcula actualPos.X
 			if (align == "left") {
-				if (parent == null || position == "absolute") {
+				if (parentNode == null || position == "absolute") {
 					actualPos.X += margin [0];
-				} else if (parent != null && position == "relative") {
-					actualPos.X = margin [0] + parentPos.X + parent.padding[0];
+				} else if (parentNode != null && position == "relative") {
+					actualPos.X = margin [0] + parentPos.X + parentNode.padding[0];
 				} 
 			} else if (align == "center") {
-				if (parent == null || position == "absolute") {
+				if (parentNode == null || position == "absolute") {
 					actualPos.X = (game.GraphicsDevice.Viewport.Width - actualSize.X) * 0.5f;
-				} else if (parent != null && position == "relative") {
+				} else if (parentNode != null && position == "relative") {
 					if (actualSize.X < parentSize.X) {
 						actualPos.X = parentPos.X + (parentSize.X - actualSize.X) * 0.5f;
 					} else {
-						actualPos.X = margin [0] + parentPos.X + parent.padding[0];
+						actualPos.X = margin [0] + parentPos.X + parentNode.padding[0];
 					}
 				}
 			} else if (align == "right") {
 				//pos ainda é considerada da esquerda p/ direita, cima p/ baixo. modificar isso.
-				if (parent == null || position == "absolute") {
+				if (parentNode == null || position == "absolute") {
 					actualPos.X += game.GraphicsDevice.Viewport.Width - (size.X + margin[2] + padding[2]);
-				} else if (parent != null && position == "relative") {
+				} else if (parentNode != null && position == "relative") {
 					//recalcular
-					actualPos.X = (parentPos.X + parent.padding[2]+parent.size.X)-(size.X + margin[2] + padding[2]);
+					actualPos.X = (parentPos.X + parentNode.padding[2]+parentNode.size.X)-(size.X + margin[2] + padding[2]);
 				}
 			}
 
 			//calcula actualPos.Y
 			if (vAlign == "top") {
-				if (parent == null || position == "absolute") {
+				if (parentNode == null || position == "absolute") {
 					actualPos.Y += margin[1];
-				} else if (parent != null && position == "relative") {
-					actualPos.Y = margin[1] + parentPos.Y + parent.padding[1];
+				} else if (parentNode != null && position == "relative") {
+					actualPos.Y = margin[1] + parentPos.Y + parentNode.padding[1];
 				} 
 			} else if (vAlign == "middle") {
-				if (parent == null || position == "absolute") {
+				if (parentNode == null || position == "absolute") {
 					actualPos.Y = (game.GraphicsDevice.Viewport.Height - actualSize.Y) * 0.5f;
-				} else if (parent != null && position == "relative") {
+				} else if (parentNode != null && position == "relative") {
 					if (actualSize.Y < parentSize.Y) {
 						actualPos.Y = parentPos.Y + (parentSize.Y - actualSize.Y) * 0.5f;
 					} else {
-						actualPos.Y = margin[1] + parentPos.Y + parent.padding[1];
+						actualPos.Y = margin[1] + parentPos.Y + parentNode.padding[1];
 					}
 				}
 			} else if (vAlign == "bottom") {
 				//pos ainda é considerada da esquerda p/ direita, cima p/ baixo. modificar isso.
-				if (parent == null || position == "absolute") {
+				if (parentNode == null || position == "absolute") {
 					actualPos.Y += game.GraphicsDevice.Viewport.Height - (size.Y + margin[3] + padding[3]);
 					actualPos.Y += margin[1];
-				} else if (parent != null && position == "relative") {
+				} else if (parentNode != null && position == "relative") {
 					//depois
 					//actualPos.Y = margin[1] + parentPos.Y + parent.padding[1];
 				}
@@ -184,10 +196,8 @@ namespace Minimax
 		}
 
 		public virtual bool OnMousePressed(Event e, bool fireClick=true){            
-            if (detectInteracion(e.vVector)) {
-                Console.WriteLine("pressed");
+            if (detectInteracion(e.vVector)) {                
                 if (!clicked && fireClick){
-                    Console.WriteLine("click");
                     OnClick(e);
                 }
 				active = true;
@@ -210,6 +220,7 @@ namespace Minimax
 
 		public virtual bool OnClick(Event e){
 			if (detectInteracion(e.vVector)) {
+				//Console.WriteLine("click");
 				Click(this,e);
 				return true;
 			}
