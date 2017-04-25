@@ -50,29 +50,24 @@ namespace Minimax
 				textSize = font.MeasureString(text);
 			}
 			size = textSize;
-			background = bg;
+			backgroundImage = bg;
 		}
 
 		public Vector2 calcTextPosition(){
 			Vector2 actualPos = calcPosition();
 			textSize = font.MeasureString(text);
 			if (textAlign == "left") {
-					return new Vector2(actualPos.X + padding[0], actualPos.Y + padding[1]); 
-			} else if (textAlign == "center") {
-				//if (textSize.X >= size.X) {
-				//	return new Vector2(actualPos.X + padding[0], actualPos.Y + padding[1]);
-				//} else {
-					return new Vector2((actualPos.X+(size.X-textSize.X)*0.5f) + padding[0],actualPos.Y+padding[1]);
-				//}
+				return new Vector2(actualPos.X + padding[0], actualPos.Y + padding[1]); 
+			} else if (textAlign == "center") {				
+				return new Vector2((actualPos.X+(size.X-textSize.X)*0.5f) + padding[0],actualPos.Y+padding[1]);
 			} else if (textAlign == "right") {
 
 			}
-
 			return new Vector2(actualPos.X + padding[0], actualPos.Y + padding[1]); 
 		}
 
 
-		public override void DrawText(){
+		public virtual void DrawText(){
 			if (text != "") {
 				game.spriteBatch.DrawString (
 					font, 
@@ -86,6 +81,18 @@ namespace Minimax
 					0.0f
 				);
 			}
+		}
+
+		public override void Draw(){
+			if (display!="none") {
+				DrawBackgroundColor();
+				DrawBackgroundImage();
+				DrawText();
+				foreach(Element ch in children) {
+					ch.Draw();
+				}
+			}
+
 		}
 
 

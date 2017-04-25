@@ -6,34 +6,18 @@ namespace Minimax
 	public class Event
 	{
 
-		public string valueType = "int";
-		public int[] vInt;
-		public string[] vString;
-		public float[] vFloat;
-		public Vector2 vVector;
+		public string type;
+		public DivElement target;
+		public DivElement origin;
+		public Vector2 coords;
 
-		public Event (params int[] p)
-		{
-			valueType="int";
-			vInt = p;
+		public Event(string t, DivElement tgt, int X=-1, int Y=-1, DivElement o = null){
+			type = t;
+			target = tgt;
+			coords = new Vector2(X, Y);
+			origin = o;
 		}
-
-		public Event(params string[] p)
-		{
-			valueType = "string";
-			vString = p;
-		}
-
-		public Event(params float[] p){
-			valueType = "float";
-			vFloat = p;
-		}
-
-		public Event(Vector2 v){
-			valueType="Vector2";
-			vVector = v;
-		}
-			
+					
 
 	}
 }

@@ -6,50 +6,30 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Minimax
 {
-	public class DivElement
+	public class DivElement : Element
 	{
-		protected Game1 game;
-
-		///pos funciona como position de top/bottom, left/right, mas depende do align/vAlign e não é levado em conta
-		///quando os valores de align/vAlign são center ou middle.
-		public Vector2 pos; 
-		public Vector2 size;
-		public Texture2D background;
-		public Color backgroundColor = Color.Transparent;
-		public Color foregroundColor = Color.White;
+		
 		public string align = "left"; //left, right, center;
 		public string vAlign = "top"; //top, bottom, middle;
 		public string position = "relative"; //relative, absolute, inherit
-		public int[] margin = new int[4] {0,0,0,0}; //left,top,right,bottom
-		public int[] padding = new int[4] {0,0,0,0}; //left,top,right,bottom
-		public DivElement parentNode = null;
-		public DivElement firstNode = null;
-		public DivElement lastNode = null;
-		public DivElement previousNode = null;
-		public DivElement nextNode = null;
-		public List<DivElement> children = new List<DivElement>();
-
 		public bool clicked = false; //foi clicado (e continua sendo)
 		public bool active = false; //está ativo
 		public bool disabled = false; //não responde a eventos mas está visível
-		public bool display = true; //não está visíviel
 		public bool mouseOver = false; //o mouse está sobre
 
-		public delegate void EventHandler(DivElement origin, Event e);
-        protected event EventHandler Click = delegate(DivElement origin, Event e) { };
-        protected event EventHandler MousePressed = delegate (DivElement origin, Event e) { };
-        protected event EventHandler MouseReleased = delegate (DivElement origin, Event e) { };
-        protected event EventHandler MouseOver = delegate (DivElement origin, Event e) { };
-        protected event EventHandler MouseOut = delegate (DivElement origin, Event e) { };
-        //protected event EventHandler Change = delegate (DivElement origin, Event e) { };
-
-
+        protected event EventHandler Click = delegate(Event e) { };
+        protected event EventHandler MousePressed = delegate (Event e) { };
+        protected event EventHandler MouseReleased = delegate (Event e) { };
+        protected event EventHandler MouseOver = delegate (Event e) { };
+        protected event EventHandler MouseOut = delegate (Event e) { };
+        
+	
 		public DivElement (Game1 g, Vector2 s, Texture2D bg=null)
 		{
 			game = g;
 			size = s;
 			pos = new Vector2(0, 0);
-			background = bg;
+			backgroundImage = bg;
 		}
 
 		public DivElement (Game1 g, Vector2 s, Vector2 p, Texture2D bg=null)
@@ -57,23 +37,12 @@ namespace Minimax
 			game = g;
 			size = s;
 			pos = p;
-			background = bg;
+			backgroundImage = bg;
 		}
 
-		public void Append(DivElement e){
-			children.Add(e);
-			e.parentNode = this;
-			if(firstNode == null) {
-				firstNode = e;
-				lastNode = e;
-			} else {
-				e.previousNode = lastNode;
-				lastNode.nextNode = e;
-				lastNode = e;
-			}
-		}
 
-		public void Margin(params int[] m){
+
+		public virtual void Margin(params int[] m){
 			if (m.Length == 1) {
 				margin = new int[4]{ m[0], m[0], m[0], m[0] };
 			} else {
@@ -83,7 +52,7 @@ namespace Minimax
 			}
 		}
 
-		public void Padding(params int[] p){
+		public virtual void Padding(params int[] p){
 			if (p.Length == 1) {
 				padding = new int[4]{ p[0], p[0], p[0], p[0] };
 			} else {
@@ -93,12 +62,12 @@ namespace Minimax
 			}
 		}
 
-		public void Align(string ha, string va){
+		public virtual void Align(string ha, string va){
 			align = ha;
 			vAlign = va;
 		}
 
-		public Vector2 calcPosition(){
+		public override Vector2 calcPosition(){
 			Vector2 actualPos = pos;
 			Vector2 actualSize = calcSize();
 			Vector2 parentPos = new Vector2(0,0);
@@ -110,11 +79,19 @@ namespace Minimax
 
 			//calcula actualPos.X
 			if (align == "left") {
-				if (parentNode == null || position == "absolute") {
-					actualPos.X += margin [0];
-				} else if (parentNode != null && position == "relative") {
-					actualPos.X = margin [0] + parentPos.X + parentNode.padding[0];
-				} 
+				if(position == "relative") {
+					if(display == "block") {
+						actualPos.X += margin[0] + parentPos.X + parentNode.padding[0];
+					} else if(display == "inline") {
+						if(previousNode != null && previousNode.display!="block") {
+							actualPos.X += margin[0] + previousNode.calcSize().X + previousNode.margin[2] + previousNode.calcPosition().X;
+						} else if (previousNode == null || (previousNode != null && previousNode.display =="block")) {
+							actualPos.X += margin[0] + parentPos.X + parentNode.padding[0];
+						}
+					}
+				} else if(position == "absolute") {
+					actualPos.X += margin[0] + parentPos.X + parentNode.padding[0];
+				}
 			} else if (align == "center") {
 				if (parentNode == null || position == "absolute") {
 					actualPos.X = (game.GraphicsDevice.Viewport.Width - actualSize.X) * 0.5f;
@@ -158,6 +135,8 @@ namespace Minimax
 					actualPos.Y += game.GraphicsDevice.Viewport.Height - (size.Y + margin[3] + padding[3]);
 					actualPos.Y += margin[1];
 				} else if (parentNode != null && position == "relative") {
+					actualPos.Y += (parentPos.Y + parentNode.padding[3]+parentNode.size.Y) - (size.Y + margin[3] + padding[3]);
+					actualPos.Y -= margin[3];
 					//depois
 					//actualPos.Y = margin[1] + parentPos.Y + parent.padding[1];
 				}
@@ -165,7 +144,7 @@ namespace Minimax
 			return actualPos;
 		}
 
-		public Vector2 calcSize(){
+		public override Vector2 calcSize(){
 			//adiciona os paddings left/right e top/bottom às dimensões
 			return size+new Vector2(padding[0]+padding[2],padding[1]+padding[3]);
 		}
@@ -181,7 +160,7 @@ namespace Minimax
 			return false;
 		}
 
-		public void AddEventListener(string type, EventHandler callback){
+		public override void AddEventListener(string type, EventHandler callback){
 			if (type.ToLower() == "click") {
 				Click += callback;
 			} else if (type.ToLower() == "mousepressed"){
@@ -196,69 +175,68 @@ namespace Minimax
 		}
 
 		public virtual bool OnMousePressed(Event e, bool fireClick=true){            
-            if (detectInteracion(e.vVector)) {                
+            if (detectInteracion(e.coords)) {                
                 if (!clicked && fireClick){
                     OnClick(e);
                 }
 				active = true;
 				clicked = true;
-				MousePressed (this, e);
+				MousePressed(e);
 				return true;
 			}
 			return false;
 		}
 
 		public virtual bool OnMouseReleased(Event e){
-			if (detectInteracion(e.vVector) && MouseReleased!=null) {
+			if (detectInteracion(e.coords) && MouseReleased!=null) {
 				active = false;
 				clicked = false;
-				MouseReleased (this, e);
+				MouseReleased(e);
 				return true;
 			}
 			return false;
 		}
 
 		public virtual bool OnClick(Event e){
-			if (detectInteracion(e.vVector)) {
+			if (detectInteracion(e.coords)) {
 				//Console.WriteLine("click");
-				Click(this,e);
+				Click(e);
 				return true;
 			}
 			return false;
 		}
 
 		public virtual bool OnMouseOver(Event e){
-			if (detectInteracion(e.vVector) && !mouseOver) {
+			if (detectInteracion(e.coords) && !mouseOver) {
 				mouseOver = true;
                 Console.WriteLine("entrou");
-				MouseOver(this, e);
+				MouseOver(e);
 				return true;
 			}
 			return false;
 		}
 
 		public virtual bool OnMouseOut(Event e){
-			if (!detectInteracion(e.vVector) && mouseOver) {
+			if (!detectInteracion(e.coords) && mouseOver) {
 				mouseOver = false;
-				MouseOut(this, e);
+				MouseOut(e);
 				return true;
 			}
 			return false;
 		}
+			
 
-		public virtual void DrawText(){}
-
-		public virtual void DrawSprite(){
-			if (background != null) {
+		public override void DrawBackgroundImage(){
+			if (backgroundImage != null) {
 				//Console.WriteLine (background.Name);
 				game.spriteBatch.Draw(
-					background,
+					backgroundImage,
 					calcPosition(),
 					null,
 					null,
 					Vector2.Zero,
 					0.0f,
-					new Vector2(calcSize().X / background.Width, calcSize().Y / background.Height),
+					new Vector2(calcSize().X / backgroundImage.Width, calcSize().Y / backgroundImage.Height),
 					foregroundColor,
 					SpriteEffects.None,
 					0.0f
@@ -266,12 +244,12 @@ namespace Minimax
 			}
 		}
 
-		public void Draw(){
-			if (display) {
-				DrawSprite();
-				DrawText();
-
+		public override void Draw(){
+			if (display!="none") {
+				DrawBackgroundColor();
+				DrawBackgroundImage();
 				foreach(DivElement ch in children) {
+
 					ch.Draw();
 				}
 			}

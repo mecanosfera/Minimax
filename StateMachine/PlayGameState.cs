@@ -24,23 +24,26 @@ namespace Minimax
 			for (int y = 0; y < game.board.size; y++) {
 				for (int x = 0; x < game.board.size; x++) {
 					Vector2 cellPos = new Vector2(
-						x * game.cellEmpty.Width + ((game.GraphicsDevice.Viewport.Width - game.cellEmpty.Width * game.board.size) / 2),
-						y * game.cellEmpty.Height + ((game.GraphicsDevice.Viewport.Height - (game.cellEmpty.Height * game.board.size)) / 2)
+						x * game.cellEmpty.Width + ((view.size.X - (game.cellEmpty.Width * game.board.size)) / 2),
+						y * game.cellEmpty.Height + ((view.size.Y - (game.cellEmpty.Height * game.board.size)) / 2)
 					);
-					AddElement(new DivElement(
-						game,
-						new Vector2(game.cellEmpty.Width,game.cellEmpty.Height),
-						cellPos,
-						game.cellEmpty
-					));
+					Console.WriteLine(cellPos);
+					DivElement cellBorder = new DivElement(
+						                        game,
+						                        new Vector2(game.cellEmpty.Width, game.cellEmpty.Height),
+						                        cellPos,
+						                        game.cellEmpty
+					                        );
+					cellBorder.position="absolute";
+
 					CellButton cell = new CellButton(
 						game,
 						new Vector2(game.cellEmpty.Width,game.cellEmpty.Height),
 						cellPos,
 						new int[2] {x,y}
 					);
-					cell.AddEventListener("click",delegate(DivElement origin, Event e){
-						CellButton c = (CellButton) origin;
+					cell.AddEventListener("click",delegate(Event e){
+						CellButton c = (CellButton) e.target;
 						if(win==0 && !game.actualPlayer.npc){
 							if(game.board.cell[c.cell[0],c.cell[1]]==0){
 								c.updateCell(game.actualPlayer.playerNumber);
@@ -48,8 +51,10 @@ namespace Minimax
 							}
 						}
 					});
+					cell.position = "absolute";
 
-					AddElement(cell);
+					view.Append(cellBorder);
+					view.Append(cell);
 					cells[x, y] = cell;
 				}
 			}
@@ -68,14 +73,14 @@ namespace Minimax
 			quitMenu = new ButtonElement(game,"Quit to Menu",new Vector2(50,20));
 			quitMenu.Align("right", "bottom");
 			//quitMenu.Margin(0);
-			quitMenu.AddEventListener("click",delegate(DivElement origin, Event e) {
+			quitMenu.AddEventListener("click",delegate(Event e) {
 				game.GameMode.Change("start");
 			});
 				
-			AddElement(scoreP1);
-			AddElement(scoreP2);
-			AddElement(scoreEmpate);
-			AddElement(quitMenu);
+			view.Append(scoreP1);
+			view.Append(scoreP2);
+			view.Append(scoreEmpate);
+			view.Append(quitMenu);
 		}
 
 		public override void Enter(string lastState=null){
@@ -94,7 +99,13 @@ namespace Minimax
 			base.HandleInput();
 			if(win == 0) {
 				if(game.actualPlayer.npc) {
-					int[] nextMove = game.actualPlayer.bestMove();
+					
+					int[] nextMove;
+					if(game.board.size == 3) {
+						nextMove = game.actualPlayer.bestMove();
+					} else {
+						nextMove = game.actualPlayer.bestMoveThreaded();
+					}
 					if(nextMove[0] > -1) {
 						cells[nextMove[0], nextMove[1]].updateCell(game.actualPlayer.playerNumber);
 					}

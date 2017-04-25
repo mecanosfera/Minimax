@@ -67,57 +67,57 @@ namespace Minimax
 			btDifPlayer1.align="center";
 			btDifPlayer1.textAlign="center";
 			btDifPlayer1.Margin(0,10+labelDifPlayer1.margin[1]+(int)labelDifPlayer1.size.Y,0,0);
-			btDifPlayer1.display = false;
+			btDifPlayer1.display = "none";
 			btDifPlayer2.align="center";
 			btDifPlayer2.textAlign="center";
 			btDifPlayer2.Margin(0,10+labelDifPlayer2.margin[1]+(int)labelDifPlayer2.size.Y,0,0);
-			btDifPlayer2.display = false;
+			btDifPlayer2.display = "none";
 
-			btStartGame.AddEventListener("click",delegate(DivElement origin, Event e) {
+			btStartGame.AddEventListener("click",delegate(Event e) {
 				game.GameMode.Change("play");
 			});
 
-            btPlayer1.AddEventListener("click",delegate(DivElement origin, Event e) {
+            btPlayer1.AddEventListener("click",delegate(Event e) {
 				if(game.player1.npc){
 					game.player1.npc = false;
 					tipoPlayer1.text = "player 1";
-					btDifPlayer1.display=false;
+					btDifPlayer1.display="none";
 				} else {
 					game.player1.npc = true;
 					tipoPlayer1.text = "npc";
-					btDifPlayer1.display=true;
+					btDifPlayer1.display="block";
 				}
 			});
 
-            btPlayer1.AddEventListener("mouseover", delegate (DivElement origin, Event e){
-                origin.foregroundColor = Color.Red;
+            btPlayer1.AddEventListener("mouseover", delegate (Event e){
+				e.target.foregroundColor = Color.Red;
             });
 
-            btPlayer1.AddEventListener("mouseout", delegate (DivElement origin, Event e) {
-                origin.foregroundColor = Color.White;
+            btPlayer1.AddEventListener("mouseout", delegate (Event e) {
+				e.target.foregroundColor = Color.White;
             });
 
-            btPlayer2.AddEventListener("click",delegate(DivElement origin, Event e) {
+            btPlayer2.AddEventListener("click",delegate(Event e) {
 				if(game.player2.npc){
 					game.player2.npc = false;
 					tipoPlayer2.text = "player 2";
-					btDifPlayer2.display=false;
+					btDifPlayer2.display="none";
 				} else {
 					game.player2.npc = true;
 					tipoPlayer2.text = "npc";
-					btDifPlayer2.display=true;
+					btDifPlayer2.display="block";
 				}
 			});
 
-			btPlayer2.AddEventListener("mouseover", delegate (DivElement origin, Event e){
-				origin.foregroundColor = Color.Purple;
+			btPlayer2.AddEventListener("mouseover", delegate (Event e){
+				e.target.foregroundColor = Color.Purple;
 			});
 
-			btPlayer2.AddEventListener("mouseout", delegate (DivElement origin, Event e) {
-				origin.foregroundColor = Color.White;
+			btPlayer2.AddEventListener("mouseout", delegate (Event e) {
+				e.target.foregroundColor = Color.White;
 			});
 				
-			btDifPlayer1.AddEventListener("click",delegate(DivElement origin, Event e) {
+			btDifPlayer1.AddEventListener("click",delegate(Event e) {
 				Console.WriteLine(game.player1.difficulty);
 				if(game.player1.difficulty==100){
 					game.player1.difficulty = 50;
@@ -128,16 +128,16 @@ namespace Minimax
 				} 
 			});
 
-			btDifPlayer1.AddEventListener("mouseover", delegate (DivElement origin, Event e){
-				origin.foregroundColor = Color.Red;
+			btDifPlayer1.AddEventListener("mouseover", delegate (Event e){
+				e.target.foregroundColor = Color.Red;
 			});
 
-			btDifPlayer1.AddEventListener("mouseout", delegate (DivElement origin, Event e) {
-				origin.foregroundColor = Color.White;
+			btDifPlayer1.AddEventListener("mouseout", delegate (Event e) {
+				e.target.foregroundColor = Color.White;
 			});
 
 
-			btDifPlayer2.AddEventListener("click",delegate(DivElement origin, Event e) {				
+			btDifPlayer2.AddEventListener("click",delegate(Event e) {				
 				if(game.player2.difficulty==100){
 					game.player2.difficulty = 50;
 					btDifPlayer2.text="medium";
@@ -147,26 +147,24 @@ namespace Minimax
 				} 
 			});
 
-			btDifPlayer2.AddEventListener("mouseover", delegate (DivElement origin, Event e){
-				origin.foregroundColor = Color.Purple;
+			btDifPlayer2.AddEventListener("mouseover", delegate (Event e){
+				e.target.foregroundColor = Color.Purple;
 			});
 
-			btDifPlayer2.AddEventListener("mouseout", delegate (DivElement origin, Event e) {
-				origin.foregroundColor = Color.White;
+			btDifPlayer2.AddEventListener("mouseout", delegate (Event e) {
+				e.target.foregroundColor = Color.White;
 			});
-
-
+				
 			divPlayer1.Append(btPlayer1);
 			divPlayer1.Append(tipoPlayer1);
-			//divPlayer1.Append(labelDifPlayer1);
 			divPlayer1.Append(btDifPlayer1);
 			divPlayer2.Append(btPlayer2);
 			divPlayer2.Append(tipoPlayer2);
-			//divPlayer2.Append(labelDifPlayer2);
 			divPlayer2.Append(btDifPlayer2);
-			Append(btStartGame);
-			Append(divPlayer1);
-			Append(divPlayer2);
+
+			view.Append(divPlayer1);
+			view.Append(divPlayer2);
+			view.Append(btStartGame);
 
 		}
 			

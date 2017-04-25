@@ -12,40 +12,30 @@ namespace Minimax
 		public string name;
 		public Game1 game;
 		public Vector2 mousePos = new Vector2(0,0);
+		public View view;
 
 		public GameState (Game1 g, string n)
 		{
 			game = g;
 			name = n;
+			view = new View(g,this);
 		}
-
-		public virtual void AddElement(DivElement e){
-			elements.Add(e);
-		}
-
-		public virtual void Append(DivElement e){
-			elements.Add(e);
-			foreach(DivElement ch in e.children){
-				elements.Add(ch);
-			}
-		}
-
+			
 		public virtual void Enter(string lastState=null){}
 			
 		public virtual void HandleInput(){
 			Vector2 newMousePos = new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
-			Event mousePosEvent = new Event(newMousePos);
 
-			foreach(DivElement e in elements) {
+			foreach(DivElement e in view.allChildren) {
 				if(newMousePos != mousePos) {
-					e.OnMouseOver(mousePosEvent);
-					e.OnMouseOut(mousePosEvent);
+					e.OnMouseOver(new Event("mouseover",e,(int)newMousePos.X,(int)newMousePos.Y));
+					e.OnMouseOut(new Event("mouseout",e,(int)newMousePos.X,(int)newMousePos.Y));
 				}
 				if(Mouse.GetState().LeftButton == ButtonState.Pressed) {
-					e.OnMousePressed(mousePosEvent);
+					e.OnMousePressed(new Event("mousepressed",e,(int)newMousePos.X,(int)newMousePos.Y));
 				}
 				if(Mouse.GetState().LeftButton == ButtonState.Released) {
-					e.OnMouseReleased(mousePosEvent);
+					e.OnMouseReleased(new Event("mousereleased",e,(int)newMousePos.X,(int)newMousePos.Y));
 				}
 			}
 			mousePos = newMousePos;
@@ -56,11 +46,7 @@ namespace Minimax
 		}
 
 		public virtual void Draw(){
-			foreach (DivElement e in elements) {
-				if (e.parentNode == null) {
-					e.Draw();
-				}
-			}
+			view.Draw();
 		}
 
 		public virtual void Exit(string newState=null){}

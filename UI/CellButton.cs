@@ -33,17 +33,17 @@ namespace Minimax
 			game.board.cell[cell[0], cell[1]] = player;
 			active = true;
 			if (game.actualPlayer.playerNumber == 1) {
-				background = game.cellO;
+				backgroundImage = game.cellO;
 				game.actualPlayer = game.player2;
 			} else {
-				background = game.cellX;
+				backgroundImage = game.cellX;
 				game.actualPlayer = game.player1;
 			}
 		}
 
 
 		public void Clear(){
-			background = null;
+			backgroundImage = null;
 			backgroundColor = Color.Transparent;
 			active = false;
 		}

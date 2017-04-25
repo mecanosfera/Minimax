@@ -10,7 +10,9 @@ namespace Minimax
 		public bool npc;
 		public int wins = 0;
 		public int difficulty = 100; //define a aleatoriedade do npc, de 0 a 100
-        public Game1 game;
+		public Game1 game;
+		public ThreadControl tc;
+		public ThreadMinmax tm;
 
 		public Player(Game1 game, int number, bool npc, int random=100)
 		{
@@ -24,9 +26,86 @@ namespace Minimax
 
 			difficulty = random;
 			this.npc = npc;
-            this.game = game;
+			this.game = game;
 
 		}
+
+
+		public int[] bestMoveThreaded(){
+			Board board = game.board;
+			int[] nextMove = new int[2] { -1, -1 };
+			int bestVal = -10;
+			List<ThreadMinmax> threads = new List<ThreadMinmax>();
+			Queue<int[]> next = new Queue<int[]>();
+
+			for(int y = 0; y < board.size; y++) {
+				for(int x = 0; x < board.size; x++) {
+					if(board.cell[x, y] == 0) {
+						//faz uma cópia do board com a primeira jogada e verifica se ganha o jogo.
+						Board myCopy = board.GetCopy();
+						myCopy.cell[x, y] = playerNumber;
+						if(myCopy.Victory() == playerNumber) {
+							nextMove[0] = x;
+							nextMove[1] = y;
+							return nextMove;
+						}
+						next.Enqueue(new int[]{x,y});
+					}
+				}
+			}
+
+
+			for(int s = 0; s < board.size; s++) {
+				if(next.Count > 0) {
+					//ThreadMinimax tm; 
+					Console.WriteLine("Creating thread");
+					tm = new ThreadMinmax(delegate() {
+						foreach(int[] c in tm.coord) {
+							Board b = board.GetCopy();
+							b.cell[c[0], c[1]] = playerNumber;
+							int depth = board.getLeft();
+							if(board.size > 3) {
+								depth = 4;
+							}
+							tm.value = Minimax(b, depth, false);
+							if(tm.value >= tm.bestVal) {
+								tm.bestVal = tm.value;
+								tm.nextPos = c;
+							}
+						}
+					});
+					threads.Add(tm);
+					tm.Add(next.Dequeue());
+				}
+			}
+			while(next.Count > 0) {
+				foreach(ThreadMinmax t in threads) {
+					if(next.Count > 0) {
+						t.Add(next.Dequeue());
+					}
+				}
+			}
+			foreach(ThreadMinmax t in threads) {
+				t.Start();
+			}
+			bool isFinished = false;
+			while(!isFinished) {
+				isFinished = true;
+				foreach(ThreadMinmax t in threads) {
+					if(!t.isFinished()) {
+						isFinished = false;
+					}
+				}	
+			}
+			foreach(ThreadMinmax t in threads) {
+				if(t.bestVal >= bestVal) {
+					bestVal = t.bestVal;
+					nextMove = t.nextPos;
+				}
+			}
+			return nextMove;
+		}
+
 
 		public int[] bestMove(bool alphabeta=false)
 		{
@@ -41,10 +120,12 @@ namespace Minimax
 			/*se optar por Minimax o loop passa por cada célula livre e calcula o valor
 			do Minimax, guardando o maior valor a célula correspondente.*/
 			if (difficulty == 100 || r.Next(1, 101) <= difficulty) {
+
 				for (int y = 0; y < board.size; y++) {
 					for (int x = 0; x < board.size; x++) {
+
 						if (board.cell [x, y] == 0) {
-							
+
 							//faz uma cópia do board com a primeira jogada e verifica se ganha o jogo.
 							Board myCopy = board.GetCopy ();
 							myCopy.cell [x, y] = playerNumber;
@@ -60,7 +141,11 @@ namespace Minimax
 							if (alphabeta) {
 								val = Minimax(myCopy, board.getLeft (), false, 9999, -9999);
 							} else {
-								val = Minimax(myCopy, board.getLeft (), false);
+								int depth = board.getLeft();
+								if(board.size > 3) {
+									depth = 3;
+								}
+								val = Minimax(myCopy, depth, false);
 							}
 							if (val >= bestVal) {
 								bestVal = val;
@@ -117,6 +202,6 @@ namespace Minimax
 			}
 			return value;
 		}
-			
+
 	}
 }
