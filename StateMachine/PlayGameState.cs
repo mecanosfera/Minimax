@@ -101,8 +101,8 @@ namespace Minimax
 				if(game.actualPlayer.npc) {
 					
 					int[] nextMove;
-					if(game.board.size == 3) {
-						nextMove = game.actualPlayer.bestMove();
+					if(game.board.size < 7) {
+						nextMove = game.actualPlayer.bestMove(true);
 					} else {
 						nextMove = game.actualPlayer.bestMoveThreaded();
 					}

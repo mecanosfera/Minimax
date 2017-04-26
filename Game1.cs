@@ -18,7 +18,7 @@ namespace Minimax
 		public SpriteFont arial12;
 		public SpriteFont arial14;
 		public SpriteFont defaultFont;
-		public Board board = new Board(5);
+		public Board board = new Board(6);
 		public Player player1;
 		public Player player2;
 		public Player actualPlayer;

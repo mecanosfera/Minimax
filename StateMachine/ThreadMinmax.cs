@@ -11,8 +11,8 @@ namespace Minimax
 		public delegate void ThreadHandler();
 		public int value;
 		public int bestVal = -10;
-		public int[] nextPos;
-		public List<int[]> coord = new List<int[]>();
+		public int[] nextMove = new int[2]{-1,-1};
+		public List<int[]> moves = new List<int[]>();
 
 
 		public ThreadMinmax(ThreadHandler th){
@@ -20,7 +20,7 @@ namespace Minimax
 		}
 
 		public void Add(int[] p){
-			coord.Add(p);
+			moves.Add(p);
 		}
 
 		public void Start(){

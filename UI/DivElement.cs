@@ -208,8 +208,7 @@ namespace Minimax
 
 		public virtual bool OnMouseOver(Event e){
 			if (detectInteracion(e.coords) && !mouseOver) {
-				mouseOver = true;
-                Console.WriteLine("entrou");
+				mouseOver = true;                
 				MouseOver(e);
 				return true;
 			}

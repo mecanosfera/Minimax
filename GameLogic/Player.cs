@@ -36,7 +36,7 @@ namespace Minimax
 			int[] nextMove = new int[2] { -1, -1 };
 			int bestVal = -10;
 			List<ThreadMinmax> threads = new List<ThreadMinmax>();
-			Queue<int[]> next = new Queue<int[]>();
+			Queue<int[]> nextCell = new Queue<int[]>();
 
 			for(int y = 0; y < board.size; y++) {
 				for(int x = 0; x < board.size; x++) {
@@ -49,43 +49,44 @@ namespace Minimax
 							nextMove[1] = y;
 							return nextMove;
 						}
-						next.Enqueue(new int[]{x,y});
+						nextCell.Enqueue(new int[]{x,y});
 					}
 				}
 			}
 
 
 			for(int s = 0; s < board.size; s++) {
-				if(next.Count > 0) {
+				if(nextCell.Count > 0) {
 					//ThreadMinimax tm; 
 					Console.WriteLine("Creating thread");
 					tm = new ThreadMinmax(delegate() {
-						foreach(int[] c in tm.coord) {
+						foreach(int[] c in tm.moves) {
 							Board b = board.GetCopy();
 							b.cell[c[0], c[1]] = playerNumber;
 							int depth = board.getLeft();
 							if(board.size > 3) {
-								depth = 4;
+								depth = 3;
 							}
 							tm.value = Minimax(b, depth, false);
 							if(tm.value >= tm.bestVal) {
 								tm.bestVal = tm.value;
-								tm.nextPos = c;
+								tm.nextMove = c;
 							}
 						}
 					});
 					threads.Add(tm);
-					tm.Add(next.Dequeue());
+					tm.Add(nextCell.Dequeue());
 				}
 			}
-			while(next.Count > 0) {
+			while(nextCell.Count > 0) {
 				foreach(ThreadMinmax t in threads) {
-					if(next.Count > 0) {
-						t.Add(next.Dequeue());
+					if(nextCell.Count > 0) {
+						t.Add(nextCell.Dequeue());
 					}
 				}
 			}
 			foreach(ThreadMinmax t in threads) {
+				//Console.WriteLine(t.moves[0][0]+","+t.moves[0][1]+" "+t.moves[1][0]+","+t.moves[1][1]);
 				t.Start();
 			}
 			bool isFinished = false;
@@ -98,9 +99,10 @@ namespace Minimax
 				}	
 			}
 			foreach(ThreadMinmax t in threads) {
+				Console.WriteLine("BestVal: "+t.bestVal+", next:"+t.nextMove[0]+","+t.nextMove[1]);
 				if(t.bestVal >= bestVal) {
 					bestVal = t.bestVal;
-					nextMove = t.nextPos;
+					nextMove = t.nextMove;
 				}
 			}
 			return nextMove;
@@ -139,7 +141,11 @@ namespace Minimax
 							// o Minimax inicia com false.
 							int val;
 							if (alphabeta) {
-								val = Minimax(myCopy, board.getLeft (), false, 9999, -9999);
+								int depth = board.getLeft();
+								if(board.size > 3) {
+									depth = 3;
+								}
+								val = Minimax(myCopy, depth, false, -999999, 999999);
 							} else {
 								int depth = board.getLeft();
 								if(board.size > 3) {
@@ -147,11 +153,14 @@ namespace Minimax
 								}
 								val = Minimax(myCopy, depth, false);
 							}
-							if (val >= bestVal) {
+
+							if(val >= bestVal) {
 								bestVal = val;
-								nextMove [0] = x;
-								nextMove [1] = y;
+								nextMove[0] = x;
+								nextMove[1] = y;
 							}
+							
+
 
 						}
 					}
@@ -176,8 +185,37 @@ namespace Minimax
 			return nextMove;
 		}
 
-		public int Minimax(Board Board, int depth, bool isMax, int alpha, int beta){
-			return 0;
+		public int Minimax(Board board, int depth, bool isMax, int alpha, int beta){
+			if(board.IsGameOver() || depth == 0){
+				return board.GetScore(this);
+			}
+			int value;
+			if(!isMax){ // MIN
+				
+				List<Board> possibilities = board.GetPossibilities(opponentNumber);
+				value = 999999;
+				foreach(Board p in possibilities){
+					value = Math.Min(value,Minimax(p, depth - 1, true,alpha,beta));
+					if(value <= alpha) {
+						return value;
+					}
+					beta = Math.Min(value, beta);
+				}
+				return value;
+			
+			} else{ // MAX
+				
+				List<Board> possibilities = board.GetPossibilities(playerNumber);
+				value = -999999;
+				foreach (Board p in possibilities){
+					value = Math.Max(value,Minimax(p, depth - 1, false,alpha,beta));
+					if(value >= beta) {
+						return value;
+					}
+					alpha = Math.Max(value, alpha);
+				}
+				return value;
+			}
 		}
 
 
