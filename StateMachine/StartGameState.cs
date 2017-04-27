@@ -11,6 +11,7 @@ namespace Minimax
 	{
 
 		ButtonElement btStartGame;
+		ButtonElement btOptions;
 		DivElement divPlayer1;
 		DivElement divPlayer2;
 		ButtonElement btPlayer1; // O
@@ -21,6 +22,7 @@ namespace Minimax
 		TextElement labelDifPlayer2;
 		ButtonElement btDifPlayer1;
 		ButtonElement btDifPlayer2;
+
 		enum difficulty {easy=0,medium=50,hard=100};
 
 
@@ -28,6 +30,7 @@ namespace Minimax
 		{
 			
 			btStartGame = new ButtonElement(game,"start");
+			btOptions = new ButtonElement(game,"options");
 			divPlayer1 = new DivElement(game,new Vector2(200,300)/*,game.cellEmpty*/);
 			divPlayer2 = new DivElement(game,new Vector2(200,300)/*,game.cellEmpty*/);
 			btPlayer1 = new ButtonElement(game, "", new Vector2(game.cellO.Width, game.cellO.Height), new Vector2(0, 0), null, game.cellO);
@@ -39,52 +42,53 @@ namespace Minimax
 			btDifPlayer1 = new ButtonElement(game, "hard");
 			btDifPlayer2 = new ButtonElement(game, "hard");
 
+
 			btStartGame.Align("center","bottom");
+			btOptions.Align("center","middle");
 			divPlayer1.align = "left";
+			divPlayer1.vAlign = "top";
 			divPlayer1.Margin(60, 60, 0, 0);
 			divPlayer2.align = "right";
 			divPlayer2.Margin(0, 60, 60, 0);
+			divPlayer2.vAlign = "top";
 
 			tipoPlayer1.align = "center";
 			tipoPlayer1.textAlign = "center";
-			tipoPlayer1.Margin(0, 60+game.cellO.Height, 0, 0);
 			tipoPlayer2.align = "center";
 			tipoPlayer2.textAlign = "center";
-			tipoPlayer2.Margin(0, 60+game.cellX.Height, 0, 0);
 
 			btPlayer1.Margin(0,50,0,0);
 			btPlayer1.align="center";
 			btPlayer2.Margin(0,50,0,0);
 			btPlayer2.align="center";
-
 			labelDifPlayer1.align = "center";
 			labelDifPlayer1.textAlign = "center";
-			labelDifPlayer1.Margin(0,10+tipoPlayer1.margin[1]+(int)tipoPlayer1.size.Y,0,0);
 			labelDifPlayer2.align = "center";
 			labelDifPlayer2.textAlign = "center";
-			labelDifPlayer2.Margin(0,10+tipoPlayer2.margin[1]+(int)tipoPlayer2.size.Y,0,0);
 
 			btDifPlayer1.align="center";
 			btDifPlayer1.textAlign="center";
-			btDifPlayer1.Margin(0,10+labelDifPlayer1.margin[1]+(int)labelDifPlayer1.size.Y,0,0);
 			btDifPlayer1.display = "none";
 			btDifPlayer2.align="center";
 			btDifPlayer2.textAlign="center";
-			btDifPlayer2.Margin(0,10+labelDifPlayer2.margin[1]+(int)labelDifPlayer2.size.Y,0,0);
-			btDifPlayer2.display = "none";
+			btDifPlayer1.display = "none";
 
 			btStartGame.AddEventListener("click",delegate(Event e) {
 				game.GameMode.Change("play");
 			});
 
+			btOptions.AddEventListener("click",delegate (Event e){
+				game.GameMode.Change("menu");
+			});
+
             btPlayer1.AddEventListener("click",delegate(Event e) {
 				if(game.player1.npc){
 					game.player1.npc = false;
-					tipoPlayer1.text = "player 1";
+					tipoPlayer1.text = "player 1";	
 					btDifPlayer1.display="none";
 				} else {
 					game.player1.npc = true;
-					tipoPlayer1.text = "npc";
+					tipoPlayer1.text = "player 1 (npc)";
 					btDifPlayer1.display="block";
 				}
 			});
@@ -104,7 +108,7 @@ namespace Minimax
 					btDifPlayer2.display="none";
 				} else {
 					game.player2.npc = true;
-					tipoPlayer2.text = "npc";
+					tipoPlayer2.text = "player 2 (npc)";
 					btDifPlayer2.display="block";
 				}
 			});
@@ -118,7 +122,6 @@ namespace Minimax
 			});
 				
 			btDifPlayer1.AddEventListener("click",delegate(Event e) {
-				Console.WriteLine(game.player1.difficulty);
 				if(game.player1.difficulty==100){
 					game.player1.difficulty = 50;
 					btDifPlayer1.text="medium";
@@ -164,7 +167,26 @@ namespace Minimax
 
 			view.Append(divPlayer1);
 			view.Append(divPlayer2);
+			view.Append(btOptions);
 			view.Append(btStartGame);
+
+		}
+
+		public override void Enter(string lastState){
+			if(game.player1.npc) {
+				btDifPlayer1.display = "block";
+				tipoPlayer1.text = "player 1 (npc)";
+			} else {
+				btDifPlayer1.display = "none";
+				tipoPlayer1.text = "player 1";
+			}
+			if(game.player2.npc) {
+				btDifPlayer2.display = "block";
+				tipoPlayer2.text = "player 2 (npc)";
+			} else {
+				btDifPlayer2.display = "none";
+				tipoPlayer2.text = "player 2";
+			}
 
 		}
 			

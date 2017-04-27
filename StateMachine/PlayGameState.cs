@@ -27,7 +27,7 @@ namespace Minimax
 						x * game.cellEmpty.Width + ((view.size.X - (game.cellEmpty.Width * game.board.size)) / 2),
 						y * game.cellEmpty.Height + ((view.size.Y - (game.cellEmpty.Height * game.board.size)) / 2)
 					);
-					Console.WriteLine(cellPos);
+
 					DivElement cellBorder = new DivElement(
 						                        game,
 						                        new Vector2(game.cellEmpty.Width, game.cellEmpty.Height),
@@ -63,16 +63,19 @@ namespace Minimax
 			scoreP2 = new TextElement(game,"X: "+score[2],new Vector2(50,20));
 			scoreEmpate = new TextElement(game,"Empate: "+score[0],new Vector2(80,20));
 			scoreP1.Margin(20);
+			scoreP1.vAlign="top";
 			scoreP2.Margin(20);
 			scoreP2.align="right";
+			scoreP2.vAlign="top";
 			scoreP2.textAlign="right";
 			scoreEmpate.Margin(20);
 			scoreEmpate.align="center";
+			scoreEmpate.vAlign="top";
 			scoreEmpate.textAlign="center";
 
 			quitMenu = new ButtonElement(game,"Quit to Menu",new Vector2(50,20));
 			quitMenu.Align("right", "bottom");
-			//quitMenu.Margin(0);
+			quitMenu.Margin(20);
 			quitMenu.AddEventListener("click",delegate(Event e) {
 				game.GameMode.Change("start");
 			});
@@ -82,30 +85,28 @@ namespace Minimax
 			view.Append(scoreEmpate);
 			view.Append(quitMenu);
 		}
+			
 
 		public override void Enter(string lastState=null){
 			game.board.Clear();
+			foreach(CellButton cell in cells) {
+				cell.Clear();
+			}
 			win = 0;
+			game.actualPlayer = game.player1;
 			if(lastState == "end") {
 				score = ((EndGameState)game.GameMode.get("end")).score;
-			} else
-            {
-                score = ((PlayGameState)game.GameMode.get("play")).score;
-                //score = new int[3]{ 0, 0, 0 };
-            }
+			} else {
+				score = new int[3]{ 0, 0, 0 };
+			}
 		}
 
 		public override void Update(){
 			base.HandleInput();
 			if(win == 0) {
 				if(game.actualPlayer.npc) {
-					
 					int[] nextMove;
-					if(game.board.size < 7) {
-						nextMove = game.actualPlayer.bestMove(true);
-					} else {
-						nextMove = game.actualPlayer.bestMoveThreaded();
-					}
+					nextMove = game.actualPlayer.bestMove(game.alphabeta);
 					if(nextMove[0] > -1) {
 						cells[nextMove[0], nextMove[1]].updateCell(game.actualPlayer.playerNumber);
 					}
@@ -114,35 +115,32 @@ namespace Minimax
 			} else {
 				if(win == 3) {
 					score[0]++;
-					scoreEmpate.text = "Empate: "+score[0];
 				} else if(win == 1) {
 					score[1]++;
-					scoreP1.text = "O: " + score[1];
 				} else {
 					score[2]++;
-					scoreP2.text = "X: "+score[2];
 				}
-                Console.WriteLine(score[0]+" "+ score[1] + " "+ score[2]);
-				game.GameMode.Change("play");
+				game.GameMode.Change("end");
 			}
-			
+			scoreEmpate.text = "Empate: "+score[0];
+			scoreP1.text = "O: " + score[1];
+			scoreP2.text = "X: "+score[2];
 		}
 
 
 		public override void Exit(string newState=null){
 			if(newState == "start") {
 				score = new int[3] { 0, 0, 0 };
-				game.board.Clear ();
+				game.board.Clear();
 				win = 0;
 				game.player1.npc = false;
 				game.player2.npc = false;
 				game.player1.difficulty = 100;
 				game.player2.difficulty = 100;
+				game.actualPlayer = game.player1;
 			}
 
-			foreach(CellButton cell in cells) {
-				cell.Clear();
-			}
+
 		}
 			
 	}

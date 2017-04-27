@@ -9,9 +9,7 @@ namespace Minimax
 	public class DivElement : Element
 	{
 		
-		public string align = "left"; //left, right, center;
-		public string vAlign = "top"; //top, bottom, middle;
-		public string position = "relative"; //relative, absolute, inherit
+
 		public bool clicked = false; //foi clicado (e continua sendo)
 		public bool active = false; //está ativo
 		public bool disabled = false; //não responde a eventos mas está visível
@@ -78,21 +76,25 @@ namespace Minimax
 			}
 
 			//calcula actualPos.X
-			if (align == "left") {
+			/*
+				- align center funciona apenas se o display for block.
+				- align left ou right só leva em conta vizinhos de mesmo alinhamento.
+			*/
+			if (align == "left" || (align=="center" && display=="inline")) {
 				if(position == "relative") {
 					if(display == "block") {
 						actualPos.X += margin[0] + parentPos.X + parentNode.padding[0];
 					} else if(display == "inline") {
-						if(previousNode != null && previousNode.display!="block") {
+						if(previousNode != null && previousNode.display!="block" && previousNode.align=="right") {
 							actualPos.X += margin[0] + previousNode.calcSize().X + previousNode.margin[2] + previousNode.calcPosition().X;
-						} else if (previousNode == null || (previousNode != null && previousNode.display =="block")) {
+						} else if (previousNode == null || (previousNode != null && previousNode.display =="block") || (previousNode!=null&& previousNode.align=="right")) {
 							actualPos.X += margin[0] + parentPos.X + parentNode.padding[0];
 						}
 					}
 				} else if(position == "absolute") {
 					actualPos.X += margin[0] + parentPos.X + parentNode.padding[0];
 				}
-			} else if (align == "center") {
+			} else if (align == "center" && display=="block") {
 				if (parentNode == null || position == "absolute") {
 					actualPos.X = (game.GraphicsDevice.Viewport.Width - actualSize.X) * 0.5f;
 				} else if (parentNode != null && position == "relative") {
@@ -108,17 +110,34 @@ namespace Minimax
 					actualPos.X += game.GraphicsDevice.Viewport.Width - (size.X + margin[2] + padding[2]);
 				} else if (parentNode != null && position == "relative") {
 					//recalcular
-					actualPos.X = (parentPos.X + parentNode.padding[2]+parentNode.size.X)-(size.X + margin[2] + padding[2]);
+					actualPos.X += (parentPos.X + parentNode.padding[2]+parentNode.size.X)-(size.X + margin[2] + padding[2]);
 				}
 			}
 
 			//calcula actualPos.Y
-			if (vAlign == "top") {
-				if (parentNode == null || position == "absolute") {
+
+
+			if(vAlign == "top") {
+				actualPos.Y += margin[1] + parentPos.Y + parentNode.padding[1];
+			} else if (vAlign == "flow") {				
+				if(position == "relative") {
+					if(display == "block") {						
+						if(previousNode != null && previousNode.display == "block" && previousNode.vAlign == "flow") {
+							actualPos.Y += previousNode.calcPosition().Y + previousNode.calcSize().Y + previousNode.margin[3] + margin[1];
+						} else if(previousNode != null && previousNode.display == "inline" && previousNode.vAlign == "flow") {
+							actualPos.Y += previousNode.calcPosition().Y;
+						} else if(previousNode == null || previousNode.vAlign != "flow") {
+							actualPos.Y += parentNode.calcPosition().Y + margin[1];
+						} 
+					}
+				} else {					
+					actualPos.Y += margin[1] + parentPos.Y + parentNode.padding[1];
+				}
+				/*if (parentNode == null || position == "absolute") {
 					actualPos.Y += margin[1];
 				} else if (parentNode != null && position == "relative") {
-					actualPos.Y = margin[1] + parentPos.Y + parentNode.padding[1];
-				} 
+					
+				} */
 			} else if (vAlign == "middle") {
 				if (parentNode == null || position == "absolute") {
 					actualPos.Y = (game.GraphicsDevice.Viewport.Height - actualSize.Y) * 0.5f;
@@ -248,7 +267,6 @@ namespace Minimax
 				DrawBackgroundColor();
 				DrawBackgroundImage();
 				foreach(DivElement ch in children) {
-
 					ch.Draw();
 				}
 			}

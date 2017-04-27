@@ -36,6 +36,10 @@ namespace Minimax
 			}
 		}
 
+		public void Set(string state, GameState state_){
+			states[state] = state_;
+		}
+
 		public GameState get(string state){
 			return states[state];
 		}

@@ -17,6 +17,9 @@ namespace Minimax
 		public Texture2D backgroundImage;
 		public string backgroundType = "no-repeat"; //repeat, no-repeat, cover	
 		public string display="block"; //block, inline, none
+		public string align = "left"; //left, right, center;
+		public string vAlign = "flow"; //top, bottom, middle;
+		public string position = "relative"; //relative, absolute, inherit
 		public Element parentNode = null;
 		public Element firstNode = null;
 		public Element lastNode = null;
@@ -54,7 +57,6 @@ namespace Minimax
 				lastNode.nextNode = e;
 				lastNode = e;
 			}
-			//Console.WriteLine("ch: "+children.Count+" t:"+e.GetType());
 		}
 
 		public virtual Element GetElementById(string id){
@@ -96,7 +98,6 @@ namespace Minimax
 
 		public virtual void DrawBackgroundImage(){
 			if (backgroundImage != null) {
-				//Console.WriteLine (background.Name);
 				game.spriteBatch.Draw(
 					backgroundImage,
 					calcPosition(),
@@ -122,13 +123,9 @@ namespace Minimax
 
 		public List<DivElement> GetChildren(){
 			List<DivElement> c = new List<DivElement>();
-			//Console.WriteLine("c: "+children.Count+" "+this.GetType());
 			foreach(DivElement ch in children) {
 				c.Add(ch);
-				//Console.WriteLine("ch: "+ch.GetChildren().Count+" "+ch.GetType());
 				c = c.Concat(ch.GetChildren()).ToList();
-
-				//c.AddRange(ch.GetChildren());
 			}
 			return c;
 		}

@@ -18,11 +18,13 @@ namespace Minimax
 		public SpriteFont arial12;
 		public SpriteFont arial14;
 		public SpriteFont defaultFont;
-		public Board board = new Board(6);
+		public Board board = new Board();
 		public Player player1;
 		public Player player2;
 		public Player actualPlayer;
 		public StateMachine GameMode;
+		public bool alphabeta=true;
+		public int depth = 3;
 
 
 		public Game1(){
@@ -30,7 +32,7 @@ namespace Minimax
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 			player1 = new Player(this, 1, false);
-			player2 = new Player(this, 2, false);
+			player2 = new Player(this, 2, true);
 			actualPlayer = player1;
 		}
 
@@ -52,6 +54,7 @@ namespace Minimax
 
 			GameMode = new StateMachine(new Dictionary<string,GameState>(){
 				{"start",	new StartGameState (this,"start")},
+				{"menu",	new MenuGameState (this,"menu")},
 				{"play",	new PlayGameState (this,"play")},
 				{"end",		new EndGameState (this,"end")}
 			}, "start");

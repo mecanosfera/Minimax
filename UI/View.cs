@@ -23,7 +23,7 @@ namespace Minimax
 		public override void Append(DivElement e){
 			base.Append(e);
 			allChildren = GetChildren();
-			Console.WriteLine(state.name+" - ch: "+children.Count+" allch:"+allChildren.Count+" t:"+e.GetType());
+			//Console.WriteLine(state.name+" - ch: "+children.Count+" allch:"+allChildren.Count+" t:"+e.GetType());
 		}
 
 		public override bool Remove(DivElement e){

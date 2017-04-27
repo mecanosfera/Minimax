@@ -26,6 +26,11 @@ namespace Minimax{
             return CheckState(cell);
         }
 
+		public void UpdateSize(int s){
+			size = s;
+			cell = new int[size, size];
+		}
+
 
         public int getLeft(){
             int left = 0;
