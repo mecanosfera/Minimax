@@ -193,6 +193,37 @@ namespace Minimax
 			} 
 		}
 
+		public void hover(Texture2D background){
+			Texture2D basebg = backgroundImage;
+			AddEventListener("mouseover",delegate(Event e) {
+				backgroundImage = background;
+			});
+			AddEventListener("mouseout",delegate(Event e) {
+				backgroundImage = basebg;
+			});
+		}
+
+		public void hoverBgColor(Color bg){
+			Color basebg = backgroundColor;
+			AddEventListener("mouseover",delegate(Event e) {
+				backgroundColor = bg;
+			});
+			AddEventListener("mouseout",delegate(Event e) {
+				backgroundColor = basebg;
+			});
+		}
+
+		public void hoverFgColor(Color fg){
+			Color basefg = foregroundColor;
+			AddEventListener("mouseover",delegate(Event e) {
+				foregroundColor = fg;
+			});
+			AddEventListener("mouseout",delegate(Event e) {
+				foregroundColor = basefg;
+			});
+		}
+
+
 		public virtual bool OnMousePressed(Event e, bool fireClick=true){            
             if (detectInteracion(e.coords)) {                
                 if (!clicked && fireClick){

@@ -131,15 +131,6 @@ namespace Minimax
 				} 
 			});
 
-			btDifPlayer1.AddEventListener("mouseover", delegate (Event e){
-				e.target.foregroundColor = Color.Red;
-			});
-
-			btDifPlayer1.AddEventListener("mouseout", delegate (Event e) {
-				e.target.foregroundColor = Color.White;
-			});
-
-
 			btDifPlayer2.AddEventListener("click",delegate(Event e) {				
 				if(game.player2.difficulty==100){
 					game.player2.difficulty = 50;
@@ -150,13 +141,10 @@ namespace Minimax
 				} 
 			});
 
-			btDifPlayer2.AddEventListener("mouseover", delegate (Event e){
-				e.target.foregroundColor = Color.Purple;
-			});
 
-			btDifPlayer2.AddEventListener("mouseout", delegate (Event e) {
-				e.target.foregroundColor = Color.White;
-			});
+			btDifPlayer1.hoverFgColor(Color.Red);
+			btDifPlayer2.hoverFgColor(Color.Purple);
+			btStartGame.hoverFgColor(Color.Green);
 				
 			divPlayer1.Append(btPlayer1);
 			divPlayer1.Append(tipoPlayer1);
