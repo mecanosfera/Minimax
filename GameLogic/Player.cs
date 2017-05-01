@@ -109,12 +109,13 @@ namespace Minimax
 		}
 
 
-		public int[] bestMove(bool alphabeta=false)
+		public int[] bestMove(bool alphabeta=false,bool deterministico=false)
 		{
 			Console.WriteLine("in minimax");
 			Board board = game.board;
 			int[] nextMove = new int[2] { -1, -1 };
 			int bestVal = -10;
+			List<int[]> bestMovePool = new List<int[]>();
 
 			//calcula a chance de uma escolha aleatória a partir do nível de randomness do jogador
 			Random r = new Random ();
@@ -154,20 +155,27 @@ namespace Minimax
 								val = Minimax(myCopy, depth, false);
 							}
 
-							if(val >= bestVal) {
+							if(val > bestVal) {
 								bestVal = val;
-								nextMove[0] = x;
-								nextMove[1] = y;
+								if(deterministico) {
+									nextMove[0] = x;
+									nextMove[1] = y;
+								}
+								bestMovePool = new List<int[]>();
+								bestMovePool.Add(new int[2]{ x, y });
+							} else if(val == bestVal) {
+								bestMovePool.Add(new int[2]{ x, y });
 							}
-							
-
 
 						}
 					}
 				}
+				if(!deterministico) {
+					return bestMovePool[r.Next(0, bestMovePool.Count)];
+				}
 			} else {
 				//escolhe aleatoriamente uma das células livres 
-				int next = r.Next (0, board.getLeft ());
+				int next = r.Next (0, board.getLeft());
 				for (int y = 0; y < board.size; y++) {
 					for (int x = 0; x < board.size; x++) {
 						if (board.cell[x, y] == 0) {

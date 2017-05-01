@@ -23,7 +23,7 @@ namespace Minimax
 		public Player player2;
 		public Player actualPlayer;
 		public StateMachine GameMode;
-		public bool alphabeta=true;
+		public bool alphabeta=false;
 		public int depth = 3;
 
 

@@ -157,7 +157,6 @@ namespace Minimax
 			view.Append(divPlayer2);
 			view.Append(btOptions);
 			view.Append(btStartGame);
-
 		}
 
 		public override void Enter(string lastState){
