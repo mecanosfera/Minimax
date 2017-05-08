@@ -25,7 +25,7 @@ namespace Minimax
 		public StateMachine GameMode;
 		public bool alphabeta=false;
 		public int depth = 3;
-
+		public bool superTicTacToeDiagonalFromHell = true;
 
 		public Game1(){
 			graphics = new GraphicsDeviceManager(this);

@@ -7,6 +7,7 @@ namespace Minimax{
 		
 		public int[,] cell;
 		public int size;
+		public bool superTicTacToeDiagonalFromHell=true;
 
 		public Board(int s=3){
 			size = s;
@@ -23,7 +24,21 @@ namespace Minimax{
 		}
 			
         public int Victory(){
-            return CheckState(cell);
+			if(superTicTacToeDiagonalFromHell) {
+				if(CheckStateDiag(cell, 1, true)) {
+					return 1;
+				}
+				if(CheckStateDiag(cell, 2, true)) {
+					return 2;
+				}
+				if (getLeft() == 0)
+				{
+					return 3;
+				}
+				return 0;
+			} else {
+				return CheckState(cell);
+			}
         }
 
 		public void UpdateSize(int s){
@@ -43,6 +58,56 @@ namespace Minimax{
             }
             return left;
         }
+
+		public bool CheckStateDiag(int[,] cells, int pNumber, bool left){
+			int delta = 3;
+			int diagonais = ((2 * size) + ((size - 5) * 2))/2;
+			bool inverte = false;
+			bool exit = true;
+			int s = size;
+			if(size == 3) {
+				s += 2;
+			}/* else if(size == 4) {
+				s += 1;
+			}*/
+			
+			if(left) {
+				for(int d = 0; d < diagonais; d++) {
+					for(int i = delta; i < s; i++) {
+						int x;
+						int y;
+						if(!inverte) {
+							y = i;
+							x = y - delta;
+
+						} else {
+							x = i;
+							y = x - delta;
+						}
+						if(cells[x, y] != pNumber) {
+							exit = false;
+							break;
+						}
+					}
+
+					if(exit) {
+						return true;
+					} else {
+						exit = true;
+					}
+
+					if(delta == 0 && !inverte) {
+						inverte = true;
+						delta = 3;
+					}
+					delta--;
+				}
+			} else {
+			
+			}
+			return false; 
+			
+		}
 
        
 		public int CheckState(int[,] cells) {
