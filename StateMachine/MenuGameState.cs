@@ -1,27 +1,45 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace Minimax
 {
 	public class MenuGameState : GameState
 	{
 
+
+		DivElement divBoardSize;
+		DivElement divDepth;
+		TextElement lblBoardSize;
+		TextElement titleBoardSize;
+		TextElement lblDepth;
+		TextElement titleDepth;
 		ButtonElement plusBoardSize;
 		ButtonElement minusBoardSize;
 		ButtonElement plusDepth;
 		ButtonElement minusDepth;
 		ButtonElement btAlphabeta;
+		ButtonElement btDiagonalFromHell;
 		ButtonElement save;
 		ButtonElement quit;
-		TextElement lblBoardSize;
-		TextElement lblDepth;
+
 		//TextElement lblAlphabeta;
 		int size;
 		int depth;
 		bool alphabeta;
-
+		bool diagonalFromHell;
 
 		public MenuGameState(Game1 g, string n): base(g,n)
 		{
+
+
+			divBoardSize = new DivElement(game, new Vector2(200,50));
+			divBoardSize.align="center";
+			divBoardSize.Margin(30);
+			divDepth = new DivElement(game, new Vector2(200,50));
+			divDepth.align="center";
+			divDepth.Margin(30);
+			titleBoardSize = new TextElement(game,"Tamanho do tabuleiro:");
+			titleBoardSize.align = "center";
 
 			plusBoardSize = new ButtonElement(game,"+");
 			minusBoardSize = new ButtonElement(game,"-");
@@ -32,6 +50,10 @@ namespace Minimax
 			quit = new ButtonElement(game, "cancel");
 			lblBoardSize = new TextElement(game, "a");
 			lblDepth = new TextElement(game, "a");
+
+			plusBoardSize.display="inline";
+			minusBoardSize.display="inline";
+			lblBoardSize.display="inline";
 
 			plusBoardSize.AddEventListener("click",delegate(Event e) {
 				if(size<11){
@@ -76,15 +98,20 @@ namespace Minimax
 			});
 
 
-			view.Append(minusBoardSize);
-			view.Append(lblBoardSize);
-			view.Append(plusBoardSize);
+
+			divBoardSize.Append(titleBoardSize);
+			divBoardSize.Append(minusBoardSize);
+			divBoardSize.Append(lblBoardSize);
+			divBoardSize.Append(plusBoardSize);
+			view.Append(divBoardSize);
 			view.Append(minusDepth);
 			view.Append(lblDepth);
 			view.Append(plusDepth);
 			view.Append(btAlphabeta);
 			view.Append(save);
 			view.Append(quit);
+
+			Console.WriteLine(((TextElement) plusBoardSize.previousNode).calcPosition());
 		}
 
 		public override void Enter(string lastState){

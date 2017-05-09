@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
+using System.Timers;
 
 namespace Minimax
 {
@@ -17,6 +18,10 @@ namespace Minimax
 		public TextElement scoreP2;
 		public TextElement scoreEmpate;
 		public ButtonElement quitMenu;
+		public bool timerEnd = false;
+		public bool timerSet = false;
+		public int timerStart = 0;
+		public Timer _timer;
 
 		public PlayGameState(Game1 g, string n): base(g,n)
 		{
@@ -59,9 +64,9 @@ namespace Minimax
 				}
 			}
 
-			scoreP1 = new TextElement(game,"O: "+score[1],new Vector2(50,20));
-			scoreP2 = new TextElement(game,"X: "+score[2],new Vector2(50,20));
-			scoreEmpate = new TextElement(game,"Empate: "+score[0],new Vector2(80,20));
+			scoreP1 = new TextElement(game,"player 1: "+score[1]);
+			scoreP2 = new TextElement(game,"player 2: "+score[2]);
+			scoreEmpate = new TextElement(game,"empate: "+score[0]);
 			scoreP1.Margin(20);
 			scoreP1.vAlign="top";
 			scoreP2.Margin(20);
@@ -104,13 +109,28 @@ namespace Minimax
 		public override void Update(){
 			base.HandleInput();
 			if(win == 0) {
-				if(game.actualPlayer.npc) {
-					int[] nextMove;
-					nextMove = game.actualPlayer.bestMove(game.alphabeta);
-					if(nextMove[0] > -1) {
-						cells[nextMove[0], nextMove[1]].updateCell(game.actualPlayer.playerNumber);
+				if(game.actualPlayer.npc){
+					if(!timerEnd) {
+						if(!timerSet) {
+							_timer = new Timer(game.IADelay);
+							timerStart++;
+							_timer.Elapsed += new ElapsedEventHandler(delegate(object sender, ElapsedEventArgs e) {
+								timerEnd = true;
+								_timer.Enabled = false;
+							});
+							_timer.Enabled = true;
+							timerSet = true;
+						}
+					} else {
+						int[] nextMove;
+						nextMove = game.actualPlayer.bestMove(game.alphabeta);
+						if(nextMove[0] > -1) {
+							cells[nextMove[0], nextMove[1]].updateCell(game.actualPlayer.playerNumber);
+						} 
+						win = game.board.Victory();
+						timerEnd = false;
+						timerSet = false;
 					}
-					win = game.board.Victory();
 				}
 			} else {
 				if(win == 3) {
@@ -123,8 +143,8 @@ namespace Minimax
 				game.GameMode.Change("end");
 			}
 			scoreEmpate.text = "Empate: "+score[0];
-			scoreP1.text = "O: " + score[1];
-			scoreP2.text = "X: "+score[2];
+			scoreP1.text = "player 1: " + score[1];
+			scoreP2.text = "player 2: "+score[2];
 		}
 
 
@@ -133,10 +153,10 @@ namespace Minimax
 				score = new int[3] { 0, 0, 0 };
 				game.board.Clear();
 				win = 0;
-				game.player1.npc = false;
-				game.player2.npc = false;
-				game.player1.difficulty = 100;
-				game.player2.difficulty = 100;
+				//game.player1.npc = false;
+				//game.player2.npc = false;
+				//game.player1.difficulty = 100;
+				//game.player2.difficulty = 100;
 				game.actualPlayer = game.player1;
 			}
 

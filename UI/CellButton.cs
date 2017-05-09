@@ -33,10 +33,10 @@ namespace Minimax
 			game.board.cell[cell[0], cell[1]] = player;
 			active = true;
 			if (game.actualPlayer.playerNumber == 1) {
-				backgroundImage = game.cellO;
+				backgroundImage = game.spriteP1;
 				game.actualPlayer = game.player2;
 			} else {
-				backgroundImage = game.cellX;
+				backgroundImage = game.spriteP2;
 				game.actualPlayer = game.player1;
 			}
 		}

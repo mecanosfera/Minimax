@@ -87,7 +87,7 @@ namespace Minimax
 					} else if(display == "inline") {
 						if(previousNode != null && previousNode.display!="block" && previousNode.align=="right") {
 							actualPos.X += margin[0] + previousNode.calcSize().X + previousNode.margin[2] + previousNode.calcPosition().X;
-						} else if (previousNode == null || (previousNode != null && previousNode.display =="block") || (previousNode!=null&& previousNode.align=="right")) {
+						} else if (previousNode == null || (previousNode != null && previousNode.display =="block") || (previousNode!=null && previousNode.align=="right")) {
 							actualPos.X += margin[0] + parentPos.X + parentNode.padding[0];
 						}
 					}

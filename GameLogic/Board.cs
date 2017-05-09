@@ -25,10 +25,10 @@ namespace Minimax{
 			
         public int Victory(){
 			if(superTicTacToeDiagonalFromHell) {
-				if(CheckStateDiag(cell, 1, true)) {
+				if(CheckStateDiag(cell, 1, true) || CheckStateDiag(cell, 1, false)) {
 					return 1;
 				}
-				if(CheckStateDiag(cell, 2, true)) {
+				if(CheckStateDiag(cell, 2, true) || CheckStateDiag(cell, 2, false)) {
 					return 2;
 				}
 				if (getLeft() == 0)
@@ -60,29 +60,23 @@ namespace Minimax{
         }
 
 		public bool CheckStateDiag(int[,] cells, int pNumber, bool left){
-			int delta = 3;
+			int delta = size-3;
 			int diagonais = ((2 * size) + ((size - 5) * 2))/2;
 			bool inverte = false;
 			bool exit = true;
-			int s = size;
-			if(size == 3) {
-				s += 2;
-			}/* else if(size == 4) {
-				s += 1;
-			}*/
-			
+
 			if(left) {
 				for(int d = 0; d < diagonais; d++) {
-					for(int i = delta; i < s; i++) {
+					for(int i = delta; i < size; i++) {
 						int x;
 						int y;
 						if(!inverte) {
 							y = i;
 							x = y - delta;
-
 						} else {
 							x = i;
 							y = x - delta;
+							//Console.WriteLine("delta: " + delta);
 						}
 						if(cells[x, y] != pNumber) {
 							exit = false;
@@ -98,12 +92,48 @@ namespace Minimax{
 
 					if(delta == 0 && !inverte) {
 						inverte = true;
-						delta = 3;
+						delta = size-2;
 					}
 					delta--;
 				}
-			} else {
-			
+			} else { //right
+				for(int d = 0; d < diagonais; d++) {
+					int diagonalSize = 1;
+					int diagonalInversionSize = (size-(delta+1));
+					int nDelta = diagonalInversionSize*-1;
+
+					for(int i = delta; i < size; i++) {
+						int x;
+						int y;
+						if(!inverte) {
+							x = size-diagonalSize;
+						} else {
+							x = size-(size-diagonalInversionSize); // 4 - (4-1) = 4-3=1 - 
+						}
+						y = x + nDelta;
+						if(cells[x, y] != pNumber) {
+							exit = false;
+							break;
+						}
+						diagonalSize++;
+						diagonalInversionSize--;
+						nDelta+= 2;
+
+					}
+						
+					if(exit) {
+						return true;
+					} else {
+						exit = true;
+					}
+
+					if(delta == 0 && !inverte) {
+						inverte = true;
+						delta = size-2;
+					}
+					delta--;
+
+				}
 			}
 			return false; 
 			

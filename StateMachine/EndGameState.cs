@@ -49,9 +49,9 @@ namespace Minimax
 				}
 			}
 
-			scoreP1 = new TextElement(game,"O: "+score[1],new Vector2(50,20));
-			scoreP2 = new TextElement(game,"X: "+score[2],new Vector2(50,20));
-			scoreEmpate = new TextElement(game,"Empate: "+score[0],new Vector2(80,20));
+			scoreP1 = new TextElement(game,"player 1: "+score[1]);
+			scoreP2 = new TextElement(game,"player 2: "+score[2]);
+			scoreEmpate = new TextElement(game,"empate: "+score[0],new Vector2(80,20));
 			scoreP1.Margin(20);
 			scoreP1.vAlign="top";
 			scoreP2.Margin(20);
@@ -65,6 +65,7 @@ namespace Minimax
 
 			quitMenu = new ButtonElement(game,"Quit to Menu",new Vector2(50,20));
 			quitMenu.Align("right", "bottom");
+			quitMenu.Margin(20);
 			quitMenu.AddEventListener("click",delegate(Event e) {
 				game.GameMode.Change("start");
 			});
@@ -91,25 +92,25 @@ namespace Minimax
 			for(int y = 0; y < game.board.size; y++) {
 				for(int x = 0; x < game.board.size; x++) {
 					if(game.board.cell[x, y] == 1) {
-						cells[x,y].backgroundImage = game.cellO;
+						cells[x,y].backgroundImage = game.spriteP1;
 					} else if(game.board.cell[x, y] == 2){
-						cells[x,y].backgroundImage = game.cellX;
+						cells[x,y].backgroundImage = game.spriteP2;
 					}
 				}
 			}
-			scoreEmpate.text = "Empate: "+score[0];
-			scoreP1.text = "O: " + score[1];
-			scoreP2.text = "X: "+ score[2];
+			scoreEmpate.text = "empate: "+score[0];
+			scoreP1.text = "player 1: " + score[1];
+			scoreP2.text = "player 2: "+ score[2];
 		}
 
 		public override void Exit(string newState=null){
 			if(newState == "start") {
 				score = new int[3] { 0, 0, 0 };
 				game.board.Clear();
-				game.player1.npc = false;
-				game.player2.npc = false;
-				game.player1.difficulty = 100;
-				game.player2.difficulty = 100;
+				//game.player1.npc = false;
+				//game.player2.npc = false;
+				//game.player1.difficulty = 100;
+				//game.player2.difficulty = 100;
 				game.actualPlayer = game.player1;
 			} else if(newState == "play") {
 				foreach(DivElement c in cells) {
@@ -117,8 +118,6 @@ namespace Minimax
 				}	
 			}
 		}
-
-
 	}
 }
 
