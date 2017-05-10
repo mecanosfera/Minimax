@@ -17,6 +17,18 @@ namespace Minimax
 
 		public ButtonElement (Game1 g, string t, SpriteFont f = null, Texture2D bg = null) : base(g,t,f,bg){}
 
+		public void setSound(bool hover=true){
+			if(hover) {
+				AddEventListener("mouseover", delegate(Event e) {
+					game.itemHoverPlay.Play();
+				});
+			}
+
+			AddEventListener("click",delegate(Event e) {
+				game.itemSelectPlay.Play();
+			});
+		}
+
 	}
 }
 

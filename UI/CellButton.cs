@@ -39,6 +39,7 @@ namespace Minimax
 				backgroundImage = game.spriteP2;
 				game.actualPlayer = game.player1;
 			}
+			Console.WriteLine(cell[0]+","+cell[1]+" = "+game.board.cell[cell[0], cell[1]]);
 		}
 
 

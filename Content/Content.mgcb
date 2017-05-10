@@ -37,3 +37,303 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Arial14Bold.spritefont
 
+#begin Sprites/terra_left.png
+/copy:Sprites/terra_left.png
+
+#begin Sprites/terra_right.png
+/copy:Sprites/terra_right.png
+
+#begin Fonts/ff6_1.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/ff6_1.spritefont
+
+#begin Fonts/ff6_22.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/ff6_22.spritefont
+
+#begin Fonts/ff6_32.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/ff6_32.spritefont
+
+#begin Sprites/menu4.png
+/copy:Sprites/menu4.png
+
+#begin Sprites/menu3.png
+/copy:Sprites/menu3.png
+
+#begin Sprites/cursor.png
+/copy:Sprites/cursor.png
+
+#begin Sprites/hand.png
+/copy:Sprites/hand.png
+
+#begin Sprites/empire_left.png
+/copy:Sprites/empire_left.png
+
+#begin Sprites/returners_left.png
+/copy:Sprites/returners_left.png
+
+#begin Sprites/returners_right.png
+/copy:Sprites/returners_right.png
+
+#begin Sprites/bg/zozo_streets_bg2.png
+/copy:Sprites/bg/zozo_streets_bg2.png
+
+#begin Sprites/bg/zozo_streets_bg1.png
+/copy:Sprites/bg/zozo_streets_bg1.png
+
+#begin Sprites/bg/narshe_caves_bg1.png
+/copy:Sprites/bg/narshe_caves_bg1.png
+
+#begin Sprites/bg/narshe_caves_bg2.png
+/copy:Sprites/bg/narshe_caves_bg2.png
+
+#begin Sprites/bg/narshe_plains_bg2.png
+/copy:Sprites/bg/narshe_plains_bg2.png
+
+#begin Sprites/bg/narshe_plains_bg1.png
+/copy:Sprites/bg/narshe_plains_bg1.png
+
+#begin Sprites/bg/narshe_streets_bg1.png
+/copy:Sprites/bg/narshe_streets_bg1.png
+
+#begin Sprites/bg/narshe_streets_bg2.png
+/copy:Sprites/bg/narshe_streets_bg2.png
+
+#begin Sprites/bg/plains_bg2.png
+/copy:Sprites/bg/plains_bg2.png
+
+#begin Sprites/bg/plains_bg1.png
+/copy:Sprites/bg/plains_bg1.png
+
+#begin Sprites/bg/opera_bg1.png
+/copy:Sprites/bg/opera_bg1.png
+
+#begin Sprites/bg/opera_bg2.png
+/copy:Sprites/bg/opera_bg2.png
+
+#begin Sprites/char/terra_victory_right.png
+/copy:Sprites/char/terra_victory_right.png
+
+#begin Sprites/char/terra_victory_left.png
+/copy:Sprites/char/terra_victory_left.png
+
+#begin Sprites/char/terra_right.png
+/copy:Sprites/char/terra_right.png
+
+#begin Sprites/char/terra_left.png
+/copy:Sprites/char/terra_left.png
+
+#begin Sprites/char/terra_front.png
+/copy:Sprites/char/terra_front.png
+
+#begin Sprites/char/terra_dead_right.png
+/copy:Sprites/char/terra_dead_right.png
+
+#begin Sprites/char/terra_dead_left.png
+/copy:Sprites/char/terra_dead_left.png
+
+#begin Sprites/char/vicks_victory_right.png
+/copy:Sprites/char/vicks_victory_right.png
+
+#begin Sprites/char/vicks_victory_left.png
+/copy:Sprites/char/vicks_victory_left.png
+
+#begin Sprites/char/vicks_right.png
+/copy:Sprites/char/vicks_right.png
+
+#begin Sprites/char/vicks_left.png
+/copy:Sprites/char/vicks_left.png
+
+#begin Sprites/char/vicks_front.png
+/copy:Sprites/char/vicks_front.png
+
+#begin Sprites/char/vicks_dead_right.png
+/copy:Sprites/char/vicks_dead_right.png
+
+#begin Sprites/char/vicks_dead_left.png
+/copy:Sprites/char/vicks_dead_left.png
+
+#begin Sprites/char/locke_victory_right.png
+/copy:Sprites/char/locke_victory_right.png
+
+#begin Sprites/char/locke_victory_left.png
+/copy:Sprites/char/locke_victory_left.png
+
+#begin Sprites/char/locke_right.png
+/copy:Sprites/char/locke_right.png
+
+#begin Sprites/char/locke_left.png
+/copy:Sprites/char/locke_left.png
+
+#begin Sprites/char/locke_front.png
+/copy:Sprites/char/locke_front.png
+
+#begin Sprites/char/locke_dead_right.png
+/copy:Sprites/char/locke_dead_right.png
+
+#begin Sprites/char/locke_dead_left.png
+/copy:Sprites/char/locke_dead_left.png
+
+#begin Sprites/char/kefka_victory_right.png
+/copy:Sprites/char/kefka_victory_right.png
+
+#begin Sprites/char/kefka_victory_left.png
+/copy:Sprites/char/kefka_victory_left.png
+
+#begin Sprites/char/kefka_right.png
+/copy:Sprites/char/kefka_right.png
+
+#begin Sprites/char/kefka_left.png
+/copy:Sprites/char/kefka_left.png
+
+#begin Sprites/char/kefka_front.png
+/copy:Sprites/char/kefka_front.png
+
+#begin Sprites/char/kefka_dead_right.png
+/copy:Sprites/char/kefka_dead_right.png
+
+#begin Sprites/char/kefka_dead_left.png
+/copy:Sprites/char/kefka_dead_left.png
+
+#begin Sprites/char/leo_victory_right.png
+/copy:Sprites/char/leo_victory_right.png
+
+#begin Sprites/char/leo_victory_left.png
+/copy:Sprites/char/leo_victory_left.png
+
+#begin Sprites/char/leo_right.png
+/copy:Sprites/char/leo_right.png
+
+#begin Sprites/char/leo_left.png
+/copy:Sprites/char/leo_left.png
+
+#begin Sprites/char/leo_front.png
+/copy:Sprites/char/leo_front.png
+
+#begin Sprites/char/leo_dead_right.png
+/copy:Sprites/char/leo_dead_right.png
+
+#begin Sprites/char/leo_dead_left.png
+/copy:Sprites/char/leo_dead_left.png
+
+#begin Sprites/char/mog_front.png
+/copy:Sprites/char/mog_front.png
+
+#begin Sprites/char/gestahl_front.png
+/copy:Sprites/char/gestahl_front.png
+
+#begin Sprites/char/edgar_victory_right.png
+/copy:Sprites/char/edgar_victory_right.png
+
+#begin Sprites/char/edgar_victory_left.png
+/copy:Sprites/char/edgar_victory_left.png
+
+#begin Sprites/char/edgar_right.png
+/copy:Sprites/char/edgar_right.png
+
+#begin Sprites/char/edgar_left.png
+/copy:Sprites/char/edgar_left.png
+
+#begin Sprites/char/celes_front.png
+/copy:Sprites/char/celes_front.png
+
+#begin Sprites/char/edgar_front.png
+/copy:Sprites/char/edgar_front.png
+
+#begin Sprites/char/edgar_dead_right.png
+/copy:Sprites/char/edgar_dead_right.png
+
+#begin Sprites/char/edgar_dead_left.png
+/copy:Sprites/char/edgar_dead_left.png
+
+#begin Sprites/char/celes_victory_right.png
+/copy:Sprites/char/celes_victory_right.png
+
+#begin Sprites/char/celes_victory_left.png
+/copy:Sprites/char/celes_victory_left.png
+
+#begin Sprites/char/celes_dead_left.png
+/copy:Sprites/char/celes_dead_left.png
+
+#begin Sprites/char/celes_dead_right.png
+/copy:Sprites/char/celes_dead_right.png
+
+#begin Sprites/char/celes_right.png
+/copy:Sprites/char/celes_right.png
+
+#begin Sprites/char/celes_left.png
+/copy:Sprites/char/celes_left.png
+
+#begin Sprites/empire_right.png
+/copy:Sprites/empire_right.png
+
+#begin sfx/menu.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/menu.wav
+
+#begin sfx/victory.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/victory.wav
+
+#begin sfx/battle.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/battle.wav
+
+#begin sfx/hand.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/hand.wav
+
+#begin sfx/select.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/select.wav
+
+#begin sfx/kefka.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/kefka.wav
+
+#begin sfx/battle_start.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/battle_start.wav
+
+#begin sfx/item_click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/item_click.wav
+
+#begin Sprites/char/hard.png
+/copy:Sprites/char/hard.png
+
+#begin Sprites/char/medium.png
+/copy:Sprites/char/medium.png
+
+#begin sfx/boss.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/boss.wav
+
+#begin Sprites/title.png
+/copy:Sprites/title.png
+

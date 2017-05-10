@@ -7,11 +7,11 @@ namespace Minimax
 	{
 
 		public string type;
-		public DivElement target;
-		public DivElement origin;
+		public Element target;
+		public Element origin;
 		public Vector2 coords;
 
-		public Event(string t, DivElement tgt, int X=-1, int Y=-1, DivElement o = null){
+		public Event(string t, Element tgt, int X=-1, int Y=-1, Element o = null){
 			type = t;
 			target = tgt;
 			coords = new Vector2(X, Y);

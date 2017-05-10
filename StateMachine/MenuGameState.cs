@@ -7,8 +7,7 @@ namespace Minimax
 	{
 
 
-		DivElement divBoardSize;
-		DivElement divDepth;
+
 		TextElement lblBoardSize;
 		TextElement titleBoardSize;
 		TextElement lblDepth;
@@ -17,7 +16,6 @@ namespace Minimax
 		ButtonElement minusBoardSize;
 		ButtonElement plusDepth;
 		ButtonElement minusDepth;
-		ButtonElement btAlphabeta;
 		ButtonElement btDiagonalFromHell;
 		ButtonElement save;
 		ButtonElement quit;
@@ -25,35 +23,64 @@ namespace Minimax
 		//TextElement lblAlphabeta;
 		int size;
 		int depth;
-		bool alphabeta;
 		bool diagonalFromHell;
 
-		public MenuGameState(Game1 g, string n): base(g,n)
-		{
+		public MenuGameState(Game1 g, string n): base(g,n){
+
+			titleBoardSize = new TextElement(game,"Board Size:",game.ff6_32);
+			titleBoardSize.position="absolute";
+			titleBoardSize.pos = new Vector2(30,30);
+
+			titleDepth = new TextElement(game,"Search Depth:",game.ff6_32);
+			titleDepth.position="absolute";
+			titleDepth.pos = new Vector2(30,130);
+
+			plusBoardSize = new ButtonElement(game,"+", game.ff6_32);
+			minusBoardSize = new ButtonElement(game,"-", game.ff6_32);
+			plusDepth = new ButtonElement(game,"+", game.ff6_32);
+			minusDepth = new ButtonElement(game,"-",game.ff6_32);
+			save = new ButtonElement(game, "SAVE",game.ff6_32);
+			quit = new ButtonElement(game, "CANCEL",game.ff6_32);
+			lblBoardSize = new TextElement(game, "a",game.ff6_32);
+			lblDepth = new TextElement(game, "a",game.ff6_32);
 
 
-			divBoardSize = new DivElement(game, new Vector2(200,50));
-			divBoardSize.align="center";
-			divBoardSize.Margin(30);
-			divDepth = new DivElement(game, new Vector2(200,50));
-			divDepth.align="center";
-			divDepth.Margin(30);
-			titleBoardSize = new TextElement(game,"Tamanho do tabuleiro:");
-			titleBoardSize.align = "center";
+			diagonalFromHell = game.board.superTicTacToeDiagonalFromHell;
+			btDiagonalFromHell = new ButtonElement(game,"SuperTicTacToeDiagonalFromHell INACTIVE",game.ff6_32);
+			btDiagonalFromHell.align="center";
+			btDiagonalFromHell.Padding(40,0,40,0);
+			btDiagonalFromHell.Margin(0,80,0,0);
+			btDiagonalFromHell.setSound();
+			btDiagonalFromHell.hover(game.hand);
+			btDiagonalFromHell.AddEventListener("click",delegate(Event e) {
+				if(diagonalFromHell){
+					diagonalFromHell=false;
+					btDiagonalFromHell.text="SuperTicTacToeDiagonalFromHell INACTIVE";
+				} else {
+					diagonalFromHell=true;
+					btDiagonalFromHell.text="SuperTicTacToeDiagonalFromHell ACTIVE";
+				}
+			});
 
-			plusBoardSize = new ButtonElement(game,"+");
-			minusBoardSize = new ButtonElement(game,"-");
-			plusDepth = new ButtonElement(game,"+");
-			minusDepth = new ButtonElement(game,"-");
-			btAlphabeta = new ButtonElement(game,"a");
-			save = new ButtonElement(game, "save");
-			quit = new ButtonElement(game, "cancel");
-			lblBoardSize = new TextElement(game, "a");
-			lblDepth = new TextElement(game, "a");
 
-			plusBoardSize.display="inline";
-			minusBoardSize.display="inline";
-			lblBoardSize.display="inline";
+			minusBoardSize.position="absolute";
+			minusBoardSize.pos = new Vector2(40, 80);
+			minusBoardSize.setSound(false);
+			lblBoardSize.position="absolute";
+			lblBoardSize.pos = new Vector2(70, 80);
+			plusBoardSize.position="absolute";
+			plusBoardSize.pos = new Vector2(100, 80);
+			plusBoardSize.setSound(false);
+
+			minusDepth.position="absolute";
+			minusDepth.pos = new Vector2(40, 180);
+			minusDepth.setSound(false);
+			lblDepth.position="absolute";
+			lblDepth.pos = new Vector2(70, 180);
+			plusDepth.position="absolute";
+			plusDepth.pos = new Vector2(100, 180);
+			plusDepth.setSound(false);
+
 
 			plusBoardSize.AddEventListener("click",delegate(Event e) {
 				if(size<11){
@@ -71,6 +98,9 @@ namespace Minimax
 				}
 				lblBoardSize.text=size+"";
 			});
+
+
+
 			plusDepth.AddEventListener("click",delegate(Event e) {
 				if(depth<size*size){
 					depth++;
@@ -84,8 +114,11 @@ namespace Minimax
 				lblDepth.text=depth+"";
 			});
 			quit.AddEventListener("click",delegate(Event e){
-				game.GameMode.Change("start");
+				game.GameMode.Change("title");
 			});
+			quit.setSound();
+			quit.hover(game.hand);
+
 			save.AddEventListener("click",delegate(Event e) {
 				if(size!=game.board.size){
 					game.board.UpdateSize(size);
@@ -93,23 +126,34 @@ namespace Minimax
 					game.GameMode.Set("end", new EndGameState(game,"end"));
 				}
 				game.depth = depth;
-				game.alphabeta = alphabeta;
-				game.GameMode.Change("start");
+				//game.alphabeta = alphabeta;
+				game.board.superTicTacToeDiagonalFromHell = diagonalFromHell;
+				game.GameMode.Change("title");
 			});
+			save.setSound();
+			save.hover(game.hand);
 
+			save.Align("left", "bottom");
+			quit.Align("right", "bottom");
 
+			save.Padding(40, 0, 40, 0);
+			quit.Padding(40, 0, 40, 0);
+			save.Margin(0, 0, 20, 20);
+			quit.Margin(0, 0, 40, 20);
 
-			divBoardSize.Append(titleBoardSize);
-			divBoardSize.Append(minusBoardSize);
-			divBoardSize.Append(lblBoardSize);
-			divBoardSize.Append(plusBoardSize);
-			view.Append(divBoardSize);
+			view.Append(titleBoardSize);
+			view.Append(minusBoardSize);
+			view.Append(lblBoardSize);
+			view.Append(plusBoardSize);
+			view.Append(titleDepth);
 			view.Append(minusDepth);
 			view.Append(lblDepth);
 			view.Append(plusDepth);
-			view.Append(btAlphabeta);
+			view.Append(btDiagonalFromHell);
 			view.Append(save);
 			view.Append(quit);
+
+			view.backgroundImage = game.menu3;
 
 			Console.WriteLine(((TextElement) plusBoardSize.previousNode).calcPosition());
 		}
@@ -117,12 +161,13 @@ namespace Minimax
 		public override void Enter(string lastState){
 			size = game.board.size;
 			depth = game.depth;
-			alphabeta = game.alphabeta;
-			string txtab = "alpha-beta active";
-			if(!alphabeta) {
-				txtab = "alpha-beta inactive";
+			Console.WriteLine(game.board.superTicTacToeDiagonalFromHell);
+			diagonalFromHell = game.board.superTicTacToeDiagonalFromHell;
+
+			btDiagonalFromHell.text = "SuperTicTacToeDiagonalFromHell INACTIVE";
+			if(diagonalFromHell) {
+				btDiagonalFromHell.text = "SuperTicTacToeDiagonalFromHell ACTIVE";
 			}
-			btAlphabeta.text = txtab;
 			lblBoardSize.text = size+"";
 			lblDepth.text = depth+"";
 		}

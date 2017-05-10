@@ -11,18 +11,21 @@ namespace Minimax
 		public string text;
 		public string textAlign = "left"; //left,right,center
 		public Vector2 textSize = new Vector2(0,0);
-		protected SpriteFont font;
+		public SpriteFont font;
 
 
 		public TextElement (Game1 g, string t, Vector2 s,Vector2 p, SpriteFont f=null, Texture2D bg = null) : base(g,s,p,bg)
 		{
 			text = t;
-			if (f != null && text != "") {
+			if(f != null && text != "") {
 				font = f;
 				textSize = font.MeasureString(text);
-			} else if (f == null && text != "") {
+			} else if(f == null && text != "") {
 				font = game.defaultFont;
 				textSize = font.MeasureString(text);
+			} else if(text == "") {
+				font = game.defaultFont;
+				textSize = new Vector2(0,0);
 			}
 		}
 
@@ -34,6 +37,9 @@ namespace Minimax
 			} else if (f == null && text != "") {
 				font = game.defaultFont;
 				textSize = font.MeasureString(text);
+			} else if(text == "") {
+				font = game.defaultFont;
+				textSize = new Vector2(0,0);
 			}
 			size = textSize;
 		}
@@ -48,6 +54,9 @@ namespace Minimax
 			} else if (f == null && text != "") {
 				font = game.defaultFont;
 				textSize = font.MeasureString(text);
+			} else if(text == "") {
+				font = game.defaultFont;
+				textSize = new Vector2(0,0);
 			}
 			size = textSize;
 			backgroundImage = bg;

@@ -26,7 +26,7 @@ namespace Minimax
 		public virtual void HandleInput(){
 			Vector2 newMousePos = new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y);
 
-			foreach(DivElement e in view.allChildren) {
+			foreach(Element e in view.allChildren) {
 				if(newMousePos != mousePos) {
 					e.OnMouseOver(new Event("mouseover",e,(int)newMousePos.X,(int)newMousePos.Y));
 					e.OnMouseOut(new Event("mouseout",e,(int)newMousePos.X,(int)newMousePos.Y));

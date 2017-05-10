@@ -10,16 +10,7 @@ namespace Minimax
 	{
 		
 
-		public bool clicked = false; //foi clicado (e continua sendo)
-		public bool active = false; //está ativo
-		public bool disabled = false; //não responde a eventos mas está visível
-		public bool mouseOver = false; //o mouse está sobre
 
-        protected event EventHandler Click = delegate(Event e) { };
-        protected event EventHandler MousePressed = delegate (Event e) { };
-        protected event EventHandler MouseReleased = delegate (Event e) { };
-        protected event EventHandler MouseOver = delegate (Event e) { };
-        protected event EventHandler MouseOut = delegate (Event e) { };
         
 	
 		public DivElement (Game1 g, Vector2 s, Texture2D bg=null)
@@ -168,31 +159,6 @@ namespace Minimax
 			return size+new Vector2(padding[0]+padding[2],padding[1]+padding[3]);
 		}
 
-		public bool detectInteracion(Vector2 p){
-			if(!disabled) {
-				Vector2 aSize = calcSize();
-				Vector2 aPos = calcPosition();
-				if((p.X >= aPos.X && p.X <= aPos.X + aSize.X) && (p.Y >= aPos.Y && p.Y <= aPos.Y + aSize.Y)) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public override void AddEventListener(string type, EventHandler callback){
-			if (type.ToLower() == "click") {
-				Click += callback;
-			} else if (type.ToLower() == "mousepressed"){
-				MousePressed += callback;	
-			} else if (type.ToLower() == "mousereleased"){
-				MouseReleased += callback;
-			} else if (type.ToLower() == "mouseover") {
-				MouseOver += callback;
-			} else if (type.ToLower() == "mouseout") {
-				MouseOut += callback;
-			} 
-		}
-
 		public void hover(Texture2D background){
 			Texture2D basebg = backgroundImage;
 			AddEventListener("mouseover",delegate(Event e) {
@@ -224,60 +190,15 @@ namespace Minimax
 		}
 
 
-		public virtual bool OnMousePressed(Event e, bool fireClick=true){            
-            if (detectInteracion(e.coords)) {                
-                if (!clicked && fireClick){
-                    OnClick(e);
-                }
-				active = true;
-				clicked = true;
-				MousePressed(e);
-				return true;
-			}
-			return false;
-		}
 
-		public virtual bool OnMouseReleased(Event e){
-			if (detectInteracion(e.coords) && MouseReleased!=null) {
-				active = false;
-				clicked = false;
-				MouseReleased(e);
-				return true;
-			}
-			return false;
-		}
-
-		public virtual bool OnClick(Event e){
-			if (detectInteracion(e.coords)) {
-				//Console.WriteLine("click");
-				Click(e);
-				return true;
-			}
-			return false;
-		}
-
-		public virtual bool OnMouseOver(Event e){
-			if (detectInteracion(e.coords) && !mouseOver) {
-				mouseOver = true;                
-				MouseOver(e);
-				return true;
-			}
-			return false;
-		}
-
-		public virtual bool OnMouseOut(Event e){
-			if (!detectInteracion(e.coords) && mouseOver) {
-				mouseOver = false;
-				MouseOut(e);
-				return true;
-			}
-			return false;
-		}
 			
 
 		public override void DrawBackgroundImage(){
 			if (backgroundImage != null) {
-				//Console.WriteLine (background.Name);
+				Vector2? bgCover = null;
+				if(backgroundType == "cover") {
+					bgCover = new Vector2(calcSize().X / backgroundImage.Width, calcSize().Y / backgroundImage.Height); 
+				}
 				game.spriteBatch.Draw(
 					backgroundImage,
 					calcPosition(),
@@ -285,7 +206,7 @@ namespace Minimax
 					null,
 					Vector2.Zero,
 					0.0f,
-					new Vector2(calcSize().X / backgroundImage.Width, calcSize().Y / backgroundImage.Height),
+					bgCover,
 					foregroundColor,
 					SpriteEffects.None,
 					0.0f
