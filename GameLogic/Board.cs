@@ -148,9 +148,6 @@ namespace Minimax{
 				for(int x = 1; x < size; x++) {
 					if(cells[x - 1, y] != cells[x, y] || cells[x,y]==0 || cells[x-1,y]==0) {
 						res = false;
-						if(y == 1) {
-							Console.WriteLine(res);
-						}
 						break;
 					}
 				}

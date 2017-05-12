@@ -63,7 +63,7 @@ namespace Minimax
 
 
 		public StateMachine GameMode;
-		public bool alphabeta=false;
+		public bool alphabeta=true;
 		public int depth = 3;
 		public bool superTicTacToeDiagonalFromHell = true;
 		public int IADelay = 1000;
@@ -266,9 +266,7 @@ namespace Minimax
 					}
 				}
 			};				
-
-
-
+				
 				
 			battle_bg1 = new Texture2D[6] {
 				Content.Load<Texture2D>("Sprites/bg/plains_bg1"),

@@ -58,7 +58,7 @@ namespace Minimax
 			for(int s = 0; s < board.size; s++) {
 				if(nextCell.Count > 0) {
 					//ThreadMinimax tm; 
-					Console.WriteLine("Creating thread");
+
 					tm = new ThreadMinmax(delegate() {
 						foreach(int[] c in tm.moves) {
 							Board b = board.GetCopy();
@@ -99,7 +99,6 @@ namespace Minimax
 				}	
 			}
 			foreach(ThreadMinmax t in threads) {
-				Console.WriteLine("BestVal: "+t.bestVal+", next:"+t.nextMove[0]+","+t.nextMove[1]);
 				if(t.bestVal >= bestVal) {
 					bestVal = t.bestVal;
 					nextMove = t.nextMove;
@@ -111,7 +110,6 @@ namespace Minimax
 
 		public int[] bestMove(bool alphabeta=false,bool deterministico=false)
 		{
-			Console.WriteLine("in minimax");
 			Board board = game.board;
 			int[] nextMove = new int[2] { -1, -1 };
 			int bestVal = -10;
@@ -189,7 +187,6 @@ namespace Minimax
 					}
 				}
 			}
-			Console.WriteLine("out minimax");
 			return nextMove;
 		}
 
